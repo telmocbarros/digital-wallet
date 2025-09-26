@@ -1,23 +1,13 @@
-import { useState, useEffect } from 'react';
 function App() {
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:8080');
-        const data: { message: string } = await response.json();
-        setText(data.message);
-      } catch (error: Error | unknown) {
-        console.log(error);
-        setText('Failed to fetch data');
-      }
-    };
-    fetchData();
-  }, []);
-  const [text, setText] = useState('');
-
   return (
     <>
-      <h1>{text}</h1>
+      <form>
+        <label htmlFor="email">Email:</label>
+        <input type="email" id="email" name="email" />
+        <label htmlFor="password">Password:</label>
+        <input type="password" id="password" name="password" />
+        <input type="submit" value="Submit" />
+      </form>
     </>
   );
 }
