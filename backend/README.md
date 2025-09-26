@@ -1,3 +1,43 @@
+# Application Development
+
+## Friday, September 26th 2025
+
+Digital Wallet Project - Work Summary:
+
+Backend (Go + Gin):
+
+- Fixed Go module imports (digitalwallet/backend/database)
+- Set up JWT authentication with session-based tokens
+- Configured CORS for React frontend (localhost:5173)
+- Implemented cookie-based auth (HttpOnly cookies)
+- Added user login endpoint with proper error handling
+- Fixed JWT type assertion bug (float64 vs int64)
+- Updated to JWT v5 library
+
+Project Structure:
+
+- Created .gitignore for Go projects
+- Organized code into packages (database, middlewares, config)
+- Added User struct with ID field
+- Implemented session storage system
+
+Authentication Flow:
+
+- Login generates session token (not JWT currently)
+- Token stored in HttpOnly cookie for security
+- Auth middleware validates requests
+- CORS configured for credential-based requests
+
+Frontend Integration:
+
+- Configured React to send cookies with credentials: 'include'
+- Discussed authentication checking patterns
+- Explained React StrictMode double-execution behavior
+- Covered race condition prevention in useEffect
+
+Current Status: Basic authentication system working with cookie-based sessions
+between React frontend and Go backend.
+
 # Set up JWT token with GoLang
 
 https://www.youtube.com/watch?v=XFxm6NEWakQ&t=621s
@@ -68,3 +108,7 @@ import (
 var ENV_VARIABLE = os.GetEnv("my-env-variable")
 fmt.Println(ENV_VARIABLE)
 ```
+
+# Set environment variable upon starting server on the CLI
+
+`❯ JWT_SECRET=my-secret-key go run app.go`
