@@ -6,6 +6,7 @@ import (
 	"digitalwallet/backend/database"
 	"digitalwallet/backend/middlewares"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -30,8 +31,18 @@ func main() {
 	// Middleware to handle CORS
 	r.Use(func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// Handle preflight OPTIONS request
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
 		c.Next()
 	})
+
 	// GET endpoit at "/"
 	r.GET("/", middlewares.AuthMiddleware, func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Hello, World!"})
@@ -43,6 +54,7 @@ func main() {
 
 		//Use Context.BindJSON to bind the request body to user.
 		if err := c.BindJSON(&user); err != nil {
+			log.Fatal("Error binding JSON:", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 			return
 		}
@@ -59,7 +71,7 @@ func main() {
 		setCookie(c, token)
 
 		//Add a 201 status code to the response, along with JSON representing the user that logged in.
-		c.IndentedJSON(http.StatusOK, user)
+		c.JSON(http.StatusOK, user)
 	})
 
 	// GET endpoint to fetch users
