@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/rand"
 	"digitalwallet/backend/config"
 	"digitalwallet/backend/database"
 	"digitalwallet/backend/middlewares"
@@ -46,14 +47,15 @@ func main() {
 			return
 		}
 		//Check if the user exists in the users slice.
-		result, err := loginUser(user)
+		userData, err := loginUser(user)
 		if err {
 			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 			return
 		}
 
 		//Generate a JWT token for the user.
-		token := generateToken(jwtSecret, result)
+		//token := generateJwtToken(jwtSecret, userData)
+		token := generateSessionToken(userData)
 		setCookie(c, token)
 
 		//Add a 201 status code to the response, along with JSON representing the user that logged in.
@@ -79,7 +81,14 @@ func loginUser(user User) (data User, error bool) {
 	return User{}, true
 }
 
-func generateToken(jwtSecret string, user User) string {
+func setCookie(c *gin.Context, token string) {
+	// Set the JWT token in a cookie
+	// Cookie will expire in 24 hours
+	// In a real application, consider setting the Secure and SameSite attributes appropriately.
+	c.SetCookie("Authorization", token, 3600*24, "", "", false, true)
+}
+
+func generateJwtToken(jwtSecret string, user User) string {
 
 	var (
 		key []byte
@@ -88,7 +97,7 @@ func generateToken(jwtSecret string, user User) string {
 
 	key = []byte(jwtSecret)
 	// Create the Claims
-	// Set token to expire in 100 days
+	// Set token to expire in 24 hours
 	// This is just for demonstration purposes. In a real application, you might want to set a shorter expiration time.
 	// Also, consider using refresh tokens for better security.
 	// See: https://auth0.com/docs/secure/tokens/json-web-tokens/json-web-token-best-practices
@@ -98,7 +107,7 @@ func generateToken(jwtSecret string, user User) string {
 	t = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userEmail": user.Email,
 		"userId":    user.Id,
-		"ttl":       time.Now().Add(time.Hour * 24 * 100).Unix(), // This represents 100 days in the future
+		"ttl":       time.Now().Add(time.Hour * 24).Unix(), // This represents 100 days in the future
 	})
 	s, err := t.SignedString(key)
 
@@ -109,10 +118,14 @@ func generateToken(jwtSecret string, user User) string {
 	return s
 }
 
-func setCookie(c *gin.Context, token string) {
-	c.SetCookie("Authorization", token, 3600*24*100, "", "", false, true)
-}
+func generateSessionToken(user User) string {
+	// Create a new session for the user
+	sessionId := rand.Text()
 
-func generateSession(user User) string {
-	return ""
+	database.SessionStorage[sessionId] = database.Session{
+		UserId:    user.Id,
+		CreatedAt: time.Now().Unix(),
+		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(), // Session expires in 24 hours
+	}
+	return sessionId
 }

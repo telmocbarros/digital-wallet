@@ -13,7 +13,8 @@ import (
 )
 
 func AuthMiddleware(c *gin.Context) {
-	jwtAuthMiddleware(c)
+	//jwtAuthMiddleware(c)
+	sessionAuthMiddleware(c)
 	c.Next()
 }
 
@@ -52,7 +53,6 @@ func jwtAuthMiddleware(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(claims["userEmail"], claims["userId"], claims["ttl"])
 	// Check expiration and validity of the token
 	if int64(claims["ttl"].(float64)) < time.Now().Unix() {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
@@ -78,4 +78,36 @@ func jwtAuthMiddleware(c *gin.Context) {
 	c.Next()
 }
 
-//func sessionAuthMiddleware(c *gin.Context) {}
+func sessionAuthMiddleware(c *gin.Context) {
+	// Retrieve the cookie from the request
+	tokenString, err := c.Cookie("Authorization")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		log.Println("Error retrieving cookie:", err)
+		c.Abort()
+		return
+	}
+
+	// Validate the session token
+	session, exists := database.SessionStorage[tokenString]
+	if !exists || session.ExpiresAt < time.Now().Unix() {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		log.Println("Invalid or expired session token")
+		c.Abort()
+		return
+	}
+
+	// Fetch user from the database (mocked here)
+	user, found := database.GetUserById(session.UserId)
+	if !found {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		log.Println("User not found")
+		c.Abort()
+		return
+	}
+
+	// Set user information in the context
+	c.Set("user", user)
+	// Go to the next middleware/handler
+	c.Next()
+}
