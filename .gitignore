@@ -74,3 +74,5 @@ secrets.yml
 # Temporary files
 *.tmp
 *.temp
+
+*.pages
