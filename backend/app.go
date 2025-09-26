@@ -30,10 +30,10 @@ func main() {
 
 	// Middleware to handle CORS
 	r.Use(func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Origin", "http://localhost:5173") // Adjust this to your frontend's origin
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
-
+		c.Header("Access-Control-Allow-Credentials", "true") // This is crucial!
 		// Handle preflight OPTIONS request
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
@@ -45,7 +45,7 @@ func main() {
 
 	// GET endpoit at "/"
 	r.GET("/", middlewares.AuthMiddleware, func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "Hello, World!"})
+		c.JSON(http.StatusOK, gin.H{"message": "Welcome back!"})
 	})
 
 	// POST endpoint to handle login
@@ -97,7 +97,7 @@ func setCookie(c *gin.Context, token string) {
 	// Set the JWT token in a cookie
 	// Cookie will expire in 24 hours
 	// In a real application, consider setting the Secure and SameSite attributes appropriately.
-	c.SetCookie("Authorization", token, 3600*24, "", "", false, true)
+	c.SetCookie("Authorization", token, 3600*24, "/", "", false, true)
 }
 
 func generateJwtToken(jwtSecret string, user User) string {
