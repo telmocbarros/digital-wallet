@@ -6,4 +6,17 @@ type Session struct {
 	ExpiresAt int64
 }
 
-var SessionStorage = make(map[string]Session)
+var sessionStorage = make(map[string]Session)
+
+func SaveSession(sessionId string, session Session) {
+	sessionStorage[sessionId] = session
+}
+
+func GetSession(sessionId string) (Session, bool) {
+	session, exists := sessionStorage[sessionId]
+	return session, exists
+}
+
+func DeleteSession(sessionId string) {
+	delete(sessionStorage, sessionId)
+}

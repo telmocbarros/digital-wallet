@@ -13,14 +13,14 @@ import (
 )
 
 func AuthMiddleware(c *gin.Context) {
-	//jwtAuthMiddleware(c)
-	sessionAuthMiddleware(c)
+	jwtAuthMiddleware(c)
+	// sessionAuthMiddleware(c)
 	c.Next()
 }
 
 func jwtAuthMiddleware(c *gin.Context) {
 	// Retrieve the cookie from the request
-	tokenString, err := c.Cookie("Authorization")
+	tokenString, err := c.Cookie("access_token")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		log.Println("Error retrieving cookie:", err)
@@ -36,7 +36,7 @@ func jwtAuthMiddleware(c *gin.Context) {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
-		hmacSampleSecret := []byte(config.JWT_SECRET)
+		hmacSampleSecret := []byte(config.ACCESS_TOKEN_SECRET)
 		return hmacSampleSecret, nil
 	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}))
 	if err != nil {
@@ -54,33 +54,24 @@ func jwtAuthMiddleware(c *gin.Context) {
 	}
 
 	// Check expiration and validity of the token
-	if int64(claims["ttl"].(float64)) < time.Now().Unix() {
+	if int64(claims["exp"].(float64)) < time.Now().Unix() {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
-		log.Println("Token expired", claims["ttl"].(float64), time.Now().Unix())
+		log.Println("Token expired", claims["exp"].(float64), time.Now().Unix())
 		c.Abort()
 		return
 	}
 	// Extract user information from the token
 	userId := claims["userId"].(string)
 
-	// Fetch user from the database (mocked here)
-	user, found := database.GetUserById(userId)
-	if !found {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		log.Println("User not found")
-		c.Abort()
-		return
-	}
-
 	// Set user information in the context
-	c.Set("user", user)
+	c.Set("userId", userId)
 	// Go to the next middleware/handler
 	c.Next()
 }
 
 func sessionAuthMiddleware(c *gin.Context) {
 	// Retrieve the cookie from the request
-	tokenString, err := c.Cookie("Authorization")
+	tokenString, err := c.Cookie("access_token")
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		log.Println("Error retrieving cookie:", err)
@@ -89,7 +80,7 @@ func sessionAuthMiddleware(c *gin.Context) {
 	}
 
 	// Validate the session token
-	session, exists := database.SessionStorage[tokenString]
+	session, exists := database.GetSession(tokenString)
 	if !exists || session.ExpiresAt < time.Now().Unix() {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		log.Println("Invalid or expired session token")
