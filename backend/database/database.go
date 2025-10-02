@@ -2,6 +2,7 @@ package database
 
 import (
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -16,13 +17,24 @@ type UserDTO struct {
 }
 
 var data []User = []User{
-	{Id: "b18b851a-c8c4-4957-b68a-14362a1810c6", Email: "john@example.com", Password: "password123"},
-	{Id: "b5ed9407-681b-4dbb-b2d3-997803e8bbfc", Email: "jane@example.com", Password: "securepass"},
+	{Id: "b18b851a-c8c4-4957-b68a-14362a1810c6", Email: "john@example.com", Password: "$2a$14$4Il8GoD6jpuFDi4ScOAqWuRZqK80cfZaUQ1TotEu2eDoIPFockbUC"}, // password123
+	{Id: "b5ed9407-681b-4dbb-b2d3-997803e8bbfc", Email: "jane@example.com", Password: "$2a$14$Od/6Z6WvfnaRAFPlzsaEEuSgOfStbdAnBO20vpQYhjnK1TNzmJHmS"}, // securepass
+}
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func VerifyUserCredentials(email, password string) (UserDTO, bool) {
+
 	for _, user := range data {
-		if user.Email == email && user.Password == password {
+		if user.Email == email && checkPasswordHash(password, user.Password) {
 			return UserDTO{
 				Email: user.Email,
 				Id:    user.Id,
@@ -70,10 +82,12 @@ func GetUsers() []UserDTO {
 
 func SaveUser(password, email string) {
 	newUserId := uuid.New().String()
+	hashedPassword, _ := hashPassword(password)
+
 	dbUser := User{
 		Id:       newUserId,
 		Email:    email,
-		Password: password,
+		Password: hashedPassword,
 	}
 	data = append(data, dbUser)
 }

@@ -83,6 +83,46 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
 	})
 
+	r.POST("/logout", middlewares.AuthMiddleware, func(c *gin.Context) {
+		userId := c.GetString("userId")
+
+		// Here you can implement any server-side session invalidation if needed.
+		// For example, you might want to store a blacklist of tokens or sessions.
+
+		log.Printf("User %s logged out successfully", userId)
+
+		// Get refresh token to revoke it
+		refreshTokenCookie, err := c.Cookie("refresh_token")
+		if err != nil {
+			log.Println("No refresh token found, clearing cookies only")
+			setCookie(c, "access_token", "", -1)
+			setCookie(c, "refresh_token", "", -1)
+			c.JSON(http.StatusOK, gin.H{"message": "Logout successful"})
+			return
+		}
+
+		// Parse refresh token to get JTI
+		rToken, err := jwt.Parse(refreshTokenCookie, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return []byte(config.REFRESH_TOKEN_SECRET), nil
+		})
+
+		if err == nil {
+			if rtClaims, ok := rToken.Claims.(jwt.MapClaims); ok {
+				jti := rtClaims["jti"].(string)
+				database.RevokeRefreshToken(jti)
+			}
+		}
+
+		// Clear the access token cookie
+		setCookie(c, "access_token", "", -1)  // Set expiry to -1 to delete the cookie
+		setCookie(c, "refresh_token", "", -1) // Set expiry to -1 to delete the cookie
+
+		c.JSON(http.StatusOK, gin.H{"message": "Logout successful"})
+	})
+
 	// POST endpoint to handle refresh token
 	r.POST("/refresh", func(c *gin.Context) {
 		refreshTokenCookie, err := c.Cookie("refresh_token")
@@ -93,18 +133,21 @@ func main() {
 		}
 
 		// Parse and validate the refresh token
-		var accessToken = handleRefreshToken(c, refreshTokenCookie, refreshToken)
-		if accessToken == "" {
+		var accessToken, refreshToken = handleRefreshToken(c, refreshTokenCookie, refreshToken)
+		if accessToken == "" || refreshToken == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
 		}
 
 		// Set the new access token in the cookie
-		setCookie(c, "access_token", accessToken, 300) // Cookie expires in 300 seconds (5 minutes)
+		setCookie(c, "access_token", accessToken, 300)    // Cookie expires in 300 seconds (5 minutes)
+		setCookie(c, "refresh_token", refreshToken, 6400) // Cookie expires in 6400 seconds (a bit less than 2 hours)
 
+		// Respond with a success message
 		c.JSON(http.StatusOK, gin.H{"message": "Access token refreshed successfully"})
 
 	})
+
 	// GET endpoint to fetch users
 	r.GET("/users", middlewares.AuthMiddleware, func(c *gin.Context) {
 		users := database.GetUsers()
@@ -218,7 +261,7 @@ func generateRefreshToken(refreshTokenSecret string, user database.UserDTO) stri
 
 }
 
-func handleRefreshToken(c *gin.Context, refreshTokenCookie, refreshTokenSecret string) string {
+func handleRefreshToken(c *gin.Context, refreshTokenCookie, refreshTokenSecret string) (string, string) {
 	// Parse and validate the refresh token
 	token, err := jwt.Parse(refreshTokenCookie, func(token *jwt.Token) (interface{}, error) {
 		// Validate the signing method
@@ -229,21 +272,21 @@ func handleRefreshToken(c *gin.Context, refreshTokenCookie, refreshTokenSecret s
 	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}))
 	if err != nil {
 		log.Println("Error parsing refresh token:", err)
-		return ""
+		return "", ""
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		log.Println("Invalid refresh token claims")
-		return ""
+		return "", ""
 	}
 
 	// Check expiration of the refresh token
 	if int64(claims["exp"].(float64)) < time.Now().Unix() {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Refresh token expired"})
 		log.Println("Refresh token expired")
-		return ""
+		return "", ""
 	}
 
 	// Check if the refresh token is revoked
@@ -251,15 +294,25 @@ func handleRefreshToken(c *gin.Context, refreshTokenCookie, refreshTokenSecret s
 	savedToken, exists := database.GetRefreshToken(jti)
 	if !exists || savedToken.Revoked {
 		log.Println("Refresh token revoked or not found")
-		return ""
+		return "", ""
 	}
 
 	// Generate a new access token
-	var accessToken = generateAccessToken(refreshTokenSecret, database.UserDTO{Id: claims["userId"].(string)})
-	if accessToken == "" {
+	var newAccessToken = generateAccessToken(refreshTokenSecret, database.UserDTO{Id: claims["userId"].(string)})
+	if newAccessToken == "" {
 		log.Println("Error generating new access token")
-		return ""
+		return "", ""
 	}
 
-	return accessToken
+	// Revoke the used refresh token
+	database.RevokeRefreshToken(jti)
+
+	// Generate a new refresh token
+	var newRefreshToken = generateRefreshToken(refreshTokenSecret, database.UserDTO{Id: claims["userId"].(string)})
+	if newRefreshToken == "" {
+		log.Fatal("Error generating new refresh token")
+		return "", ""
+	}
+
+	return newAccessToken, newRefreshToken
 }
