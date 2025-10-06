@@ -1,8 +1,8 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import apiClient from './middleware/auth';
+import apiClient, { setAuthState, getAuthState } from './middleware/auth';
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(getAuthState());
   const [users, setUsers] = useState<{ id: string; email: string }[] | null>(
     null
   );
@@ -24,10 +24,16 @@ function App() {
 
       console.log('Auth status response:', response.data);
 
-      return response.data.authenticated;
+      const isAuthenticated = response.data.authenticated;
+      // Sync client-side state with server reality
+      setAuthState(isAuthenticated);
+
+      return isAuthenticated;
     } catch (error) {
       console.log('Not authenticated');
       console.error('Error:', error);
+      // Clear auth state on error
+      setAuthState(false);
       return false;
     }
   }
@@ -43,10 +49,14 @@ function App() {
       .post('/login', { email, password })
       .then((response) => {
         console.log(response.data);
+        // Set auth state after successful login
+        setAuthState(true);
         setIsLoggedIn(true);
       })
       .catch((error) => {
         console.error('Error:', error);
+        // Clear auth state on login failure
+        setAuthState(false);
       });
   }
 
@@ -64,6 +74,25 @@ function App() {
       })
       .catch((error) => {
         console.error('Error:', error);
+        setUsers(null);
+      });
+  }
+
+  function handleLogout() {
+    apiClient
+      .post('/logout')
+      .then(() => {
+        console.log('Logged out successfully');
+        // Clear auth state after successful logout
+        setAuthState(false);
+        setIsLoggedIn(false);
+        setUsers(null);
+      })
+      .catch((error) => {
+        console.error('Logout error:', error);
+        // Clear auth state even on error (fail-safe)
+        setAuthState(false);
+        setIsLoggedIn(false);
         setUsers(null);
       });
   }
@@ -88,6 +117,7 @@ function App() {
         <div>
           <h1>Do Something</h1>
           <button onClick={fetchUsers}>Fetch Users</button>
+          <button onClick={handleLogout}>Logout</button>
           <ol>
             {users &&
               users.map((user: { id: string; email: string }) => (
