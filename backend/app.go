@@ -15,6 +15,13 @@ import (
 )
 
 type User = database.User
+type UserLogin struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+var ACCESS_TOKEN_EXPIRY = time.Second * 30 // 30 seconds for testing purposes
+var REFRESH_TOKEN_EXPIRY = time.Minute * 5 // 1 minute for testing purposes
 
 func main() {
 	accessToken := config.ACCESS_TOKEN_SECRET
@@ -53,16 +60,62 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "Welcome back!"})
 	})
 
+	// GET endpoint to check authentication status
+	r.GET("/auth/status", func(c *gin.Context) {
+		// Try to get the access token cookie
+		tokenString, err := c.Cookie("access_token")
+		if err != nil {
+			// No token present - user is not authenticated
+			c.JSON(http.StatusOK, gin.H{"authenticated": false})
+			return
+		}
+
+		// Parse and validate the token
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return []byte(config.ACCESS_TOKEN_SECRET), nil
+		})
+
+		if err != nil || !token.Valid {
+			// Invalid token
+			c.JSON(http.StatusOK, gin.H{"authenticated": false})
+			return
+		}
+
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			c.JSON(http.StatusOK, gin.H{"authenticated": false})
+			return
+		}
+
+		// Check expiration
+		if int64(claims["exp"].(float64)) < time.Now().Unix() {
+			c.JSON(http.StatusOK, gin.H{"authenticated": false})
+			return
+		}
+
+		// Token is valid
+		userId := claims["userId"].(string)
+		c.JSON(http.StatusOK, gin.H{
+			"authenticated": true,
+			"userId":        userId,
+		})
+	})
+
 	// POST endpoint to handle login
 	r.POST("/login", func(c *gin.Context) {
-		var email = c.Query("email")
-		var password = c.Query("password")
-
-		if email == "" || password == "" {
-			fmt.Println("Invalid login attempt: missing email or password")
+		//Parse the JSON body to get email and password.
+		var user UserLogin
+		if err := c.BindJSON(&user); err != nil {
+			fmt.Println("Invalid login attempt: missing email or password", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password are required"})
 			return
 		}
+
+		email := user.Email
+		password := user.Password
 
 		//Check if the user exists in the users slice.
 		userData, err := loginUser(email, password)
@@ -77,8 +130,8 @@ func main() {
 		refreshToken := generateRefreshToken(refreshToken, userData)
 
 		// token := generateSessionToken(userData)
-		setCookie(c, "access_token", accessToken, 300)    // Cookie expires in 300 seconds (5 minutes)
-		setCookie(c, "refresh_token", refreshToken, 6400) // Cookie expires in 6400 seconds (a bit less than 2 hours)
+		setCookie(c, "access_token", accessToken, 30)    // Cookie expires in 300 seconds (5 minutes)
+		setCookie(c, "refresh_token", refreshToken, 300) // Cookie expires in 6400 seconds (a bit less than 2 hours)
 		//Add a 201 status code to the response, along with JSON representing the user that logged in.
 		c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
 	})
@@ -135,6 +188,9 @@ func main() {
 		// Parse and validate the refresh token
 		var accessToken, refreshToken = handleRefreshToken(c, refreshTokenCookie, refreshToken)
 		if accessToken == "" || refreshToken == "" {
+			// Clear cookies when refresh fails
+			setCookie(c, "access_token", "", -1)
+			setCookie(c, "refresh_token", "", -1)
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 			return
 		}
@@ -207,7 +263,8 @@ func generateAccessToken(accessTokenSecret string, user database.UserDTO) string
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userEmail": user.Email,
 		"userId":    user.Id,
-		"exp":       time.Now().Add(time.Minute * 5).Unix(), // This represents 5 minutes from now
+		"exp":       time.Now().Add(ACCESS_TOKEN_EXPIRY).Unix(), // This represents 30 seconds from now
+		//"exp": time.Now().Add(time.Minute * 5).Unix(), // This represents 5 minutes from now
 	})
 	s, err := token.SignedString(key)
 
@@ -225,7 +282,8 @@ func generateSessionToken(user User) string {
 	database.SaveSession(sessionId, database.Session{
 		UserId:    user.Id,
 		CreatedAt: time.Now().Unix(),
-		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(), // Session expires in 24 hours
+		ExpiresAt: time.Now().Add(ACCESS_TOKEN_EXPIRY).Unix(), // This represents 30 seconds from now,
+		//ExpiresAt: time.Now().Add(24 * time.Hour).Unix(), // Session expires in 24 hours
 	})
 	return sessionId
 }
@@ -233,7 +291,8 @@ func generateSessionToken(user User) string {
 func generateRefreshToken(refreshTokenSecret string, user database.UserDTO) string {
 	key := []byte(refreshTokenSecret)
 	jti := rand.Text()
-	expirationTime := time.Now().Add(7 * 24 * time.Hour).Unix() // Refresh token valid for 7 days
+	//expirationTime := time.Now().Add(7 * 24 * time.Hour).Unix()   // Refresh token valid for 7 days
+	expirationTime := time.Now().Add(REFRESH_TOKEN_EXPIRY).Unix() // Refresh token valid for 1 minute
 	creationTime := time.Now().Unix()
 	// Create a new JWT token for the refresh token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

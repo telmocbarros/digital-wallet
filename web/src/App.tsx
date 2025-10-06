@@ -1,7 +1,11 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import apiClient from './middleware/auth';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [users, setUsers] = useState<{ id: string; email: string }[] | null>(
+    null
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -16,21 +20,13 @@ function App() {
   }, []);
   async function checkAuthStatus(): Promise<boolean> {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_ENDPOINT}/`, {
-        method: 'GET',
-        credentials: 'include', // Include cookies in the request
-      });
+      const response = await apiClient.get('/auth/status');
 
-      if (!response.ok) {
-        console.log('Not authenticated');
-        return false;
-      }
+      console.log('Auth status response:', response.data);
 
-      const data = await response.json();
-      console.log('User is authenticated: ', data);
-
-      return true;
+      return response.data.authenticated;
     } catch (error) {
+      console.log('Not authenticated');
       console.error('Error:', error);
       return false;
     }
@@ -43,23 +39,35 @@ function App() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    fetch(`${import.meta.env.VITE_API_ENDPOINT}/login`, {
-      method: 'POST',
-      credentials: 'include', // Include cookies in the request
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
+    apiClient
+      .post('/login', { email, password })
+      .then((response) => {
+        console.log(response.data);
         setIsLoggedIn(true);
       })
       .catch((error) => {
         console.error('Error:', error);
       });
   }
+
+  function fetchUsers() {
+    apiClient
+      .get('/users')
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.error) {
+          // setIsLoggedIn(false);
+          setUsers(null);
+          return;
+        }
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setUsers(null);
+      });
+  }
+
   return (
     <div id="content">
       {!isLoggedIn && (
@@ -76,7 +84,20 @@ function App() {
           <button type="submit">Login</button>
         </form>
       )}
-      {isLoggedIn && <p>Welcome back!</p>}
+      {isLoggedIn && (
+        <div>
+          <h1>Do Something</h1>
+          <button onClick={fetchUsers}>Fetch Users</button>
+          <ol>
+            {users &&
+              users.map((user: { id: string; email: string }) => (
+                <li key={user.id}>
+                  {user.id} - {user.email}
+                </li>
+              ))}
+          </ol>
+        </div>
+      )}
     </div>
   );
 }
