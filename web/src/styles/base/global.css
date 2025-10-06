@@ -1,0 +1,25 @@
+html {
+    /* Better font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Prevent adjustments of font size after orientation changes */
+    -webkit-text-size-adjust: 100%;
+
+    /* Better box model by default */
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-normal);
+}

@@ -1,0 +1,18 @@
+/* Fluid typography for better scalability */
+@media (min-width: 768px) {
+    :root {
+        --font-size-base: 1.125rem;
+        /* 18px on larger screens */
+    }
+
+    h1 {
+        font-size: var(--font-size-5xl);
+    }
+}
+
+/* Improve readability with max-width on text containers */
+.prose,
+article {
+    max-width: 65ch;
+    /* Optimal line length for readability */
+}

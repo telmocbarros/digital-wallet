@@ -8,13 +8,15 @@ function App() {
   );
 
   useEffect(() => {
-    let cancelled = false;
+    let cancelled = false; // To avoid setting state on unmounted component
     const checkAuth = async () => {
       const isAuthenticated = await checkAuthStatus();
       if (!cancelled) setIsLoggedIn(isAuthenticated);
     };
     checkAuth();
     return () => {
+      // Cleanup function to set cancelled flag
+      // This prevents state updates if the component unmounts
       cancelled = true;
     };
   }, []);
@@ -100,18 +102,46 @@ function App() {
   return (
     <div id="content">
       {!isLoggedIn && (
-        <form onSubmit={handleSubmission}>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" autoComplete="on" />
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            autoComplete="on"
+        <div id="login-form">
+          <img
+            src="./src/assets/DigitalWalletIcon.png"
+            alt="digital-wallet-icon"
+            width="200"
+            height="200"
           />
-          <button type="submit">Login</button>
-        </form>
+          <h2>Welcome</h2>
+          <p>Enter your details to login</p>
+          <form onSubmit={handleSubmission}>
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter email"
+              autoComplete="on"
+            />
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              autoComplete="on"
+            />
+            <div id="form-password_options">
+              <div id="form-password_options_checkbox">
+                <input type="checkbox" />
+                <p>Remember me</p>
+              </div>
+              <a>Forgot your password?</a>
+            </div>
+            <button type="submit">Login</button>
+            <div id="form-new_account">
+              <p>Don't have an account?</p>&nbsp;&nbsp;
+              <a>Register</a>
+            </div>
+          </form>
+        </div>
       )}
       {isLoggedIn && (
         <div>

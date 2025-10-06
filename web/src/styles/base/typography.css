@@ -1,0 +1,127 @@
+/* Headings - establish hierarchy */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    margin-top: 0;
+    margin-bottom: var(--space-md);
+}
+
+h1 {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--space-lg);
+}
+
+h2 {
+    font-size: var(--font-size-3xl);
+}
+
+h3 {
+    font-size: var(--font-size-2xl);
+}
+
+h4 {
+    font-size: var(--font-size-xl);
+}
+
+h5 {
+    font-size: var(--font-size-lg);
+}
+
+h6 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Paragraph and text elements */
+p {
+    margin-top: 0;
+    margin-bottom: var(--space-md);
+}
+
+/* Last paragraph in a container shouldn't have bottom margin */
+p:last-child {
+    margin-bottom: 0;
+}
+
+/* Links */
+a {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-decoration-thickness: 0.0625em;
+    text-underline-offset: 0.125em;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-link-hover);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Lists */
+ul,
+ol {
+    margin-top: 0;
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-xl);
+}
+
+li {
+    margin-bottom: var(--space-sm);
+}
+
+li:last-child {
+    margin-bottom: 0;
+}
+
+/* Inline text elements */
+strong,
+b {
+    font-weight: var(--font-weight-bold);
+}
+
+em,
+i {
+    font-style: italic;
+}
+
+small {
+    font-size: var(--font-size-sm);
+}
+
+mark {
+    background-color: #fff3cd;
+    padding: 0.125em 0.25em;
+}
+
+code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: #f5f5f5;
+    padding: 0.125em 0.25em;
+    border-radius: 3px;
+}
+
+pre {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    background-color: #f5f5f5;
+    padding: var(--space-md);
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0 0 var(--space-md) 0;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
