@@ -1,5 +1,8 @@
+import DarkModeToggleIcon from '../atoms/icons/DarkModeToggleIcon';
 import DigitalWalletIcon from '../atoms/icons/DigitalWalletIcon';
+import LanguageIcon from '../atoms/icons/LanguageIcon';
 import UserIcon from '../atoms/icons/UserIcon';
+import NotificationBellIcon from '../atoms/icons/NotificationBellIcon';
 import SearchBar from '../molecules/SearchBar';
 import './Navbar.css';
 
@@ -20,8 +23,17 @@ export default function Navbar({
         <DigitalWalletIcon onClick={onAppIconClick} className="navbar-icon" />
         <span className="navbar-title">Cozy Wallet</span>
       </div>
+      <div className="navbar-center">
+        <SearchBar
+          className="navbar-desktop-only"
+          placeholder="Search"
+          onSearch={onSearch}
+        />
+      </div>
       <div className="navbar-actions">
-        <SearchBar placeholder="Search" onSearch={onSearch} />
+        <NotificationBellIcon className="navbar-icon navbar-desktop-only" />
+        <DarkModeToggleIcon className="navbar-icon navbar-desktop-only" />
+        <LanguageIcon className="navbar-icon navbar-desktop-only" />
         <UserIcon onClick={onProfileIconClick} className="navbar-icon" />
       </div>
     </nav>

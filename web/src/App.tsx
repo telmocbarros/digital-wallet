@@ -7,7 +7,8 @@ import AuthLayout from './components/templates/AuthLayout';
 import MainLayout from './components/templates/MainLayout';
 
 function App() {
-  const { isLoggedIn, login, logout } = useAuth();
+  const { /*isLoggedIn,*/ login, logout } = useAuth();
+  const isLoggedIn = true; // For testing purposes
   const [users, setUsers] = useState<{ id: string; email: string }[] | null>(
     null
   );

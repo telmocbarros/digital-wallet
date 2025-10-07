@@ -31,6 +31,13 @@
   }
 }
 
+.navbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
 .navbar-actions {
   display: flex;
   align-items: center;
@@ -47,4 +54,10 @@
 
 .navbar-icon:hover {
   opacity: 0.8;
+}
+
+@media only screen and (max-width: 640px) {
+  .navbar-desktop-only {
+    display: none;
+  }
 }

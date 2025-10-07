@@ -30,7 +30,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
       <SlideMenu isOpen={displayAppMenu} side="left">
         <ul>
-          <li>Dashboard</li>
+          <li className="font-extrabold">Dashboard</li>
           <li>Transactions</li>
           <li>Wallet</li>
         </ul>

@@ -85,3 +85,13 @@ export default defineConfig([
 ## Main navigation bar user icon
 
 <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
+
+## Main navigation bar dark mode icon
+
+<a href="https://www.flaticon.com/free-icons/darkmode" title="darkmode icons">Darkmode icons created by Techwinter - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/sun" title="sun icons">Sun icons created by bqlqn - Flaticon</a>
+
+## Main navigation bar language icon
+
+<a href="https://www.flaticon.com/free-icons/uk-flag" title="uk flag icons">Uk flag icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/portugal" title="portugal icons">Portugal icons created by verluk - Flaticon</a>
