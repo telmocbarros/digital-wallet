@@ -1,6 +1,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import apiClient, { setAuthState, getAuthState } from './middleware/auth';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(getAuthState());
   const [users, setUsers] = useState<{ id: string; email: string }[] | null>(
@@ -100,11 +101,11 @@ function App() {
   }
 
   return (
-    <div id="content">
+    <div className="content">
       {!isLoggedIn && (
-        <div id="login-form">
+        <div className="login-form">
           <img
-            src="./src/assets/DigitalWalletIcon.png"
+            src="./src/assets/DigitalWalletIcon.svg"
             alt="digital-wallet-icon"
             width="200"
             height="200"
@@ -128,16 +129,16 @@ function App() {
               placeholder="Enter your password"
               autoComplete="on"
             />
-            <div id="form-password_options">
-              <div id="form-password_options_checkbox">
+            <div className="form-password-options">
+              <div className="form-password-options-checkbox">
                 <input type="checkbox" />
                 <p>Remember me</p>
               </div>
               <a>Forgot your password?</a>
             </div>
             <button type="submit">Login</button>
-            <div id="form-new_account">
-              <p>Don't have an account?</p>&nbsp;&nbsp;
+            <div className="form-new-account">
+              <p>Don't have an account?</p>
               <a>Register</a>
             </div>
           </form>

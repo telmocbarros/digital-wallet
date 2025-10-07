@@ -1,68 +1,156 @@
-#content {
-    background-color: #F6F4F1;
+/* Main container */
+.content {
+    background-color: var(--color-bg-base);
     display: flex;
     align-items: center;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: var(--space-md);
 }
 
-#login-form {
+/* Login form container */
+.login-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    max-width: 500px;
+    padding: var(--space-lg);
+    background-color: var(--color-bg-surface);
 }
 
-#login-form form {
+.login-form form {
     display: flex;
     flex-direction: column;
-    width: 85%;
-}
-
-form input {
-    margin-bottom: 1rem;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #F6F4F1;
-}
-
-form button {
-    padding: 10px;
     width: 100%;
-    background-color: #192F43;
+}
+
+/* Form inputs */
+form input[type="email"],
+form input[type="password"] {
+    margin-bottom: var(--space-md);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-input);
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 3px rgba(25, 47, 67, 0.1);
+}
+
+form input[type="email"]::placeholder,
+form input[type="password"]::placeholder {
+    color: var(--color-text-muted);
+}
+
+/* Form button */
+form button[type="submit"] {
+    padding: var(--space-md);
+    width: 100%;
+    background-color: var(--color-primary);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    margin: 1rem 0
+    margin: var(--space-md) 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    transition: background-color var(--transition-base), transform var(--transition-fast);
 }
 
-#form-password_options {
+form button[type="submit"]:hover {
+    background-color: var(--color-primary-hover);
+}
+
+form button[type="submit"]:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+form button[type="submit"]:active {
+    transform: translateY(1px);
+}
+
+/* Password options row */
+.form-password-options {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
 }
 
-#form-password_options_checkbox {
+.form-password-options-checkbox {
     display: flex;
-    align-items: baseline;
+    align-items: center;
+    gap: var(--space-sm);
 }
 
-#form-new_account {
+.form-password-options-checkbox input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.form-password-options-checkbox p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.form-password-options a {
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: color var(--transition-base);
+}
+
+.form-password-options a:hover {
+    color: var(--color-link-hover);
+}
+
+/* New account link */
+.form-new-account {
     display: flex;
-    margin: auto;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
 }
 
+.form-new-account p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.form-new-account a {
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: color var(--transition-base);
+}
+
+.form-new-account a:hover {
+    color: var(--color-link-hover);
+}
+
+/* Form labels */
+form label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+/* Tablet and desktop styles */
 @media only screen and (min-width: 768px) {
-    #login-form {
-        border: 1px solid black;
-        border-radius: 8px;
-        box-shadow: 12px 12px 2px 1px #192F43;
-        padding: 3%;
-
-        width: 100%;
-        max-width: 500px;
-        margin: auto
+    .login-form {
+        border: 1px solid var(--color-border-dark);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        padding: var(--space-2xl);
     }
 }
