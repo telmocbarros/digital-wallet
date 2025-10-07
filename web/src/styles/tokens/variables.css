@@ -41,6 +41,14 @@
     --space-xl: 2rem;
     --space-2xl: 3rem;
 
+    /* Icon Sizes */
+    --size-icon-sm: 1rem;
+    /* 16px */
+    --size-icon-md: 2.5rem;
+    /* 40px */
+    --size-icon-lg: 3rem;
+    /* 48px */
+
     /* Colors */
     --color-text-primary: #1a1a1a;
     --color-text-secondary: #666;
@@ -57,6 +65,7 @@
     --color-bg-base: #F6F4F1;
     --color-bg-surface: #ffffff;
     --color-bg-input: #F6F4F1;
+    --color-bg-menu: #5A8AAF;
 
     /* Border Colors */
     --color-border-base: #ccc;

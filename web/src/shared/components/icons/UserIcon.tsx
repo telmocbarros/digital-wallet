@@ -1,0 +1,37 @@
+import type { SVGProps } from 'react';
+import type { JSX } from 'react/jsx-runtime';
+
+export default function UserIconComponent(
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) {
+  return (
+    <svg
+      version="1.0"
+      xmlns="http://www.w3.org/2000/svg"
+      width="64.000000pt"
+      height="64.000000pt"
+      viewBox="0 0 64.000000 64.000000"
+      preserveAspectRatio="xMidYMid meet"
+      {...props}
+    >
+      <g
+        transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
+        fill="currentColor"
+        stroke="none"
+      >
+        <path
+          d="M223 622 c-109 -39 -178 -112 -210 -221 -29 -102 4 -228 82 -306 122
+-121 328 -121 450 0 91 92 118 241 64 356 -69 146 -241 223 -386 171z m199
+-42 c162 -62 229 -270 133 -416 -16 -26 -18 -26 -27 -8 -28 52 -62 93 -93 110
+-19 10 -35 20 -35 22 0 2 11 17 25 34 46 55 28 154 -35 192 -36 21 -104 21
+-140 0 -63 -38 -81 -137 -35 -192 14 -17 25 -32 25 -34 0 -2 -16 -12 -35 -22
+-31 -17 -65 -58 -93 -110 -9 -18 -11 -18 -27 8 -71 109 -55 263 38 354 79 78
+195 102 299 62z m-36 -112 c48 -43 31 -128 -31 -153 -31 -14 -39 -14 -70 0
+-62 25 -79 109 -31 153 38 36 93 36 132 0z m7 -219 c59 -31 120 -119 102 -149
+-3 -6 -25 -20 -48 -33 -60 -31 -194 -31 -254 0 -23 13 -45 27 -48 33 -18 29
+41 116 100 148 26 15 120 15 148 1z"
+        />
+      </g>
+    </svg>
+  );
+}
