@@ -3,8 +3,8 @@ import { useState } from 'react';
 import apiClient from './api/middleware/auth';
 import { useAuth } from './features/auth/hooks/useAuth';
 import LoginForm from './features/auth/components/LoginForm';
-import AuthLayout from './layouts/AuthLayout';
-import MainLayout from './layouts/MainLayout';
+import AuthLayout from './components/templates/AuthLayout';
+import MainLayout from './components/templates/MainLayout';
 
 function App() {
   const { isLoggedIn, login, logout } = useAuth();

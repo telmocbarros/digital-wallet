@@ -1,0 +1,31 @@
+import type { JSX, SVGProps } from 'react';
+
+function SearchIcon(props: SVGProps<SVGSVGElement>): JSX.Element {
+  return (
+    <svg
+      version="1.0"
+      xmlns="http://www.w3.org/2000/svg"
+      width="64.000000pt"
+      height="64.000000pt"
+      viewBox="0 0 64.000000 64.000000"
+      preserveAspectRatio="xMidYMid meet"
+      {...props}
+    >
+      <g
+        transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
+        fill="currentColor"
+        stroke="none"
+      >
+        <path
+          d="M226 574 c-32 -10 -64 -31 -97 -64 -124 -124 -92 -319 66 -403 59
+-31 164 -30 228 2 l47 25 45 -44 c43 -42 46 -43 62 -27 16 16 15 19 -27 62
+l-44 45 25 47 c31 61 33 169 5 223 -61 117 -189 173 -310 134z m193 -77 c103
+-68 115 -213 26 -303 -96 -95 -249 -73 -312 45 -25 48 -30 120 -12 168 13 36
+66 92 104 109 49 23 145 14 194 -19z"
+        />
+      </g>
+    </svg>
+  );
+}
+
+export default SearchIcon;

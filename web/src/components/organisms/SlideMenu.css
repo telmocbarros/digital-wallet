@@ -1,0 +1,30 @@
+/* Shared slide menu styles */
+.slide-menu {
+  position: fixed;
+  top: 4.5rem;
+  width: 100%;
+  height: calc(100vh - 4.5rem);
+  background-color: var(--color-bg-base);
+  z-index: 900;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Left slide menu */
+.slide-menu--left {
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.slide-menu--left.open {
+  transform: translateX(0);
+}
+
+/* Right slide menu */
+.slide-menu--right {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.slide-menu--right.open {
+  transform: translateX(0);
+}
