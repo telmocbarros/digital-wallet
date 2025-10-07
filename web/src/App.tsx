@@ -1,7 +1,8 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import apiClient from './api/middleware/auth';
 import { useAuth } from './features/auth/hooks/useAuth';
+import { useTheme } from './hooks/useTheme';
 import LoginForm from './features/auth/components/LoginForm';
 import AuthLayout from './components/templates/AuthLayout';
 import MainLayout from './components/templates/MainLayout';
@@ -9,6 +10,11 @@ import MainLayout from './components/templates/MainLayout';
 function App() {
   const { /*isLoggedIn,*/ login, logout } = useAuth();
   const isLoggedIn = true; // For testing purposes
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
   const [users, setUsers] = useState<{ id: string; email: string }[] | null>(
     null
   );

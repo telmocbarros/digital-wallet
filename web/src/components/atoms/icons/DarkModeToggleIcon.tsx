@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useTheme } from '../../../hooks/useTheme';
 
 const Sun = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -78,14 +78,12 @@ const Moon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 function DarkModeToggleIcon(props: React.SVGProps<SVGSVGElement>) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  function toggleDarkMode() {
-    setIsDarkMode(!isDarkMode);
-  }
-  return isDarkMode ? (
-    <Moon onClick={toggleDarkMode} {...props} />
+  const { theme, toggleTheme } = useTheme();
+
+  return theme === 'dark' ? (
+    <Moon onClick={toggleTheme} {...props} />
   ) : (
-    <Sun onClick={toggleDarkMode} {...props} />
+    <Sun onClick={toggleTheme} {...props} />
   );
 }
 

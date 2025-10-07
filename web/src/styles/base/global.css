@@ -21,5 +21,6 @@ body {
     font-size: var(--font-size-base);
     line-height: var(--line-height-normal);
     color: var(--color-text-primary);
+    background-color: var(--color-bg-base);
     font-weight: var(--font-weight-normal);
 }
