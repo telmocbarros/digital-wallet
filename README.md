@@ -2,7 +2,7 @@ Excellent — let’s make your **Digital Wallet Project** the anchor portfolio 
 
 ---
 
-# 🏦 Digital Wallet Project – Senior Portfolio Anchor
+# 🏦 Cozy Wallet: Digital Wallet Project – Senior Portfolio Anchor
 
 ## 🎯 High-Level Goal
 
