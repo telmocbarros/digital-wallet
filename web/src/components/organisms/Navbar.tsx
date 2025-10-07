@@ -5,9 +5,11 @@ import UserIcon from '../atoms/icons/UserIcon';
 import NotificationBellIcon from '../atoms/icons/NotificationBellIcon';
 import SearchBar from '../molecules/SearchBar';
 import './Navbar.css';
+import HamburgerMenuIcon from '../atoms/icons/HamburgerMenuIcon';
 
 interface NavbarProps {
   onAppIconClick: () => void;
+  onHamburgerIconClick: () => void;
   onProfileIconClick: () => void;
   onSearch?: (value: string) => void;
 }
@@ -15,6 +17,7 @@ interface NavbarProps {
 export default function Navbar({
   onAppIconClick,
   onProfileIconClick,
+  onHamburgerIconClick,
   onSearch,
 }: NavbarProps) {
   return (
@@ -31,10 +34,17 @@ export default function Navbar({
         />
       </div>
       <div className="navbar-actions">
+        <HamburgerMenuIcon
+          onClick={onHamburgerIconClick}
+          className="navbar-icon navbar-mobile-only"
+        />
         <NotificationBellIcon className="navbar-icon navbar-desktop-only" />
         <DarkModeToggleIcon className="navbar-icon navbar-desktop-only" />
         <LanguageIcon className="navbar-icon navbar-desktop-only" />
-        <UserIcon onClick={onProfileIconClick} className="navbar-icon" />
+        <UserIcon
+          onClick={onProfileIconClick}
+          className="navbar-icon navbar-desktop-only"
+        />
       </div>
     </nav>
   );

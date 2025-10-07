@@ -18,6 +18,10 @@
   gap: 0.75rem;
 }
 
+.navbar-brand .navbar-icon {
+  transform: scale(1.67);
+}
+
 .navbar-title {
   font-size: 1.125rem;
   font-weight: 600;
@@ -58,8 +62,16 @@
   opacity: 0.8;
 }
 
+.navbar-mobile-only {
+  display: none;
+}
+
 @media only screen and (max-width: 640px) {
   .navbar-desktop-only {
     display: none;
+  }
+
+  .navbar-mobile-only {
+    display: block;
   }
 }

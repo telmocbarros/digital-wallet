@@ -9,15 +9,20 @@ interface MainLayoutProps {
 
 export default function MainLayout({ children }: MainLayoutProps) {
   const [displayAppMenu, setDisplayAppMenu] = useState(false);
-  const [displayProfileMenu, setDisplayProfileMenu] = useState(false);
+  const [displaySettingsMenu, setDisplaySettingsMenu] = useState(false);
 
   function handleAppIconClick() {
     setDisplayAppMenu(!displayAppMenu);
-    setDisplayProfileMenu(false); // Close other menu
+    setDisplaySettingsMenu(false); // Close other menu
   }
 
   function handleProfileIconClick() {
-    setDisplayProfileMenu(!displayProfileMenu);
+    setDisplaySettingsMenu(!displaySettingsMenu);
+    setDisplayAppMenu(false); // Close other menu
+  }
+
+  function handleMenuIconClick() {
+    setDisplaySettingsMenu(!displaySettingsMenu);
     setDisplayAppMenu(false); // Close other menu
   }
 
@@ -26,6 +31,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <Navbar
         onAppIconClick={handleAppIconClick}
         onProfileIconClick={handleProfileIconClick}
+        onHamburgerIconClick={handleMenuIconClick}
       />
 
       <SlideMenu isOpen={displayAppMenu} side="left">
@@ -36,7 +42,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         </ul>
       </SlideMenu>
 
-      <SlideMenu isOpen={displayProfileMenu} side="right">
+      <SlideMenu isOpen={displaySettingsMenu} side="right">
         <ul>
           <li>Profile</li>
           <li>Settings</li>
