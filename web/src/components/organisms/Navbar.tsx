@@ -10,13 +10,11 @@ import HamburgerMenuIcon from '../atoms/icons/HamburgerMenuIcon';
 interface NavbarProps {
   onAppIconClick: () => void;
   onHamburgerIconClick: () => void;
-  onProfileIconClick: () => void;
   onSearch?: (value: string) => void;
 }
 
 export default function Navbar({
   onAppIconClick,
-  onProfileIconClick,
   onHamburgerIconClick,
   onSearch,
 }: NavbarProps) {

@@ -16,11 +16,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
     setDisplaySettingsMenu(false); // Close other menu
   }
 
-  function handleProfileIconClick() {
-    setDisplaySettingsMenu(!displaySettingsMenu);
-    setDisplayAppMenu(false); // Close other menu
-  }
-
   function handleMenuIconClick() {
     setDisplaySettingsMenu(!displaySettingsMenu);
     setDisplayAppMenu(false); // Close other menu
@@ -30,7 +25,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <>
       <Navbar
         onAppIconClick={handleAppIconClick}
-        onProfileIconClick={handleProfileIconClick}
         onHamburgerIconClick={handleMenuIconClick}
       />
 
