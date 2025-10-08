@@ -1,0 +1,21 @@
+version: "3"
+
+vars:
+  BINARY_NAME: digital-wallet-api
+  MAIN_PATH: ./cmd/api/main.go
+
+tasks:
+  dev:
+    desc: Start the development server
+    cmds:
+      - go run {{.MAIN_PATH}}
+
+  build:
+    desc: Build the application
+    cmds:
+      - go build -o bin/{{.BINARY_NAME}} {{.MAIN_PATH}}
+
+  test:
+    desc: Run all tests
+    cmds:
+      - go test -v ./...
