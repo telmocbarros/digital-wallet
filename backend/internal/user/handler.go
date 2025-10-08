@@ -56,13 +56,13 @@ func (h *Handler) Create(c *gin.Context) {
 		return
 	}
 
-	if req.Email == "" || req.Password == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password are required"})
+	if req.Email == "" || req.Password == "" || req.FirstName == "" || req.LastName == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email, password, first name, and last name are required"})
 		return
 	}
 
 	// Register user
-	userDTO, err := h.service.Register(req.Email, req.Password)
+	userDTO, err := h.service.Register(req.Email, req.Password, req.FirstName, req.LastName)
 	if err != nil {
 		if err == pkg.ErrUserAlreadyExists {
 			c.JSON(http.StatusConflict, gin.H{"error": "User already exists"})

@@ -12,7 +12,7 @@ type Repository interface {
 	GetByEmail(email string) (*User, error)
 	GetByID(id string) (*User, error)
 	GetAll() ([]UserDTO, error)
-	Create(email, password string) (*User, error)
+	Create(email, password, firstName, lastName string) (*User, error)
 	VerifyCredentials(email, password string) (*UserDTO, error)
 }
 
@@ -25,8 +25,8 @@ type inMemoryRepository struct {
 func NewRepository() Repository {
 	return &inMemoryRepository{
 		users: []User{
-			{ID: "b18b851a-c8c4-4957-b68a-14362a1810c6", Email: "john@example.com", Password: "$2a$14$4Il8GoD6jpuFDi4ScOAqWuRZqK80cfZaUQ1TotEu2eDoIPFockbUC"}, // password123
-			{ID: "b5ed9407-681b-4dbb-b2d3-997803e8bbfc", Email: "jane@example.com", Password: "$2a$14$Od/6Z6WvfnaRAFPlzsaEEuSgOfStbdAnBO20vpQYhjnK1TNzmJHmS"}, // securepass
+			{ID: "b18b851a-c8c4-4957-b68a-14362a1810c6", Email: "john@example.com", Password: "$2a$14$4Il8GoD6jpuFDi4ScOAqWuRZqK80cfZaUQ1TotEu2eDoIPFockbUC", FirstName: "John", LastName: "Doe"}, // password123
+			{ID: "b5ed9407-681b-4dbb-b2d3-997803e8bbfc", Email: "jane@example.com", Password: "$2a$14$Od/6Z6WvfnaRAFPlzsaEEuSgOfStbdAnBO20vpQYhjnK1TNzmJHmS", FirstName: "Jane", LastName: "Doe"}, // securepass
 		},
 	}
 }
@@ -61,7 +61,7 @@ func (r *inMemoryRepository) GetAll() ([]UserDTO, error) {
 }
 
 // Create creates a new user with hashed password
-func (r *inMemoryRepository) Create(email, password string) (*User, error) {
+func (r *inMemoryRepository) Create(email, password, firstName, lastName string) (*User, error) {
 	// Check if user already exists
 	if _, err := r.GetByEmail(email); err == nil {
 		return nil, pkg.ErrUserAlreadyExists
@@ -75,9 +75,11 @@ func (r *inMemoryRepository) Create(email, password string) (*User, error) {
 
 	// Create user
 	user := User{
-		ID:       uuid.New().String(),
-		Email:    email,
-		Password: string(hashedPassword),
+		ID:        uuid.New().String(),
+		Email:     email,
+		FirstName: firstName,
+		LastName:  lastName,
+		Password:  string(hashedPassword),
 	}
 
 	r.users = append(r.users, user)

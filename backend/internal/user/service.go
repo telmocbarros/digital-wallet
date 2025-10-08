@@ -15,14 +15,14 @@ func NewService(repo Repository) *Service {
 }
 
 // Register creates a new user account
-func (s *Service) Register(email, password string) (*UserDTO, error) {
+func (s *Service) Register(email, password, firstName, lastName string) (*UserDTO, error) {
 	// Validate input
-	if email == "" || password == "" {
+	if email == "" || password == "" || firstName == "" || lastName == "" {
 		return nil, pkg.ErrMissingField
 	}
 
 	// Create user through repository
-	user, err := s.repo.Create(email, password)
+	user, err := s.repo.Create(email, password, firstName, lastName)
 	if err != nil {
 		return nil, err
 	}
