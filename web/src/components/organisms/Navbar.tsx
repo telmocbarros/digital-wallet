@@ -1,7 +1,7 @@
 import DarkModeToggleIcon from '../atoms/icons/DarkModeToggleIcon';
 import DigitalWalletIcon from '../atoms/icons/DigitalWalletIcon';
 import LanguageIcon from '../atoms/icons/LanguageIcon';
-import UserIcon from '../atoms/icons/UserIcon';
+import UserBarIcon from '../molecules/UserBarIcon';
 import NotificationBellIcon from '../atoms/icons/NotificationBellIcon';
 import SearchBar from '../molecules/SearchBar';
 import './Navbar.css';
@@ -41,10 +41,7 @@ export default function Navbar({
         <NotificationBellIcon className="navbar-icon navbar-desktop-only" />
         <DarkModeToggleIcon className="navbar-icon navbar-desktop-only" />
         <LanguageIcon className="navbar-icon navbar-desktop-only" />
-        <UserIcon
-          onClick={onProfileIconClick}
-          className="navbar-icon navbar-desktop-only"
-        />
+        <UserBarIcon className="navbar-desktop-only" />
       </div>
     </nav>
   );

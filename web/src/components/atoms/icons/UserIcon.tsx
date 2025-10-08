@@ -1,7 +1,7 @@
 import type { SVGProps } from 'react';
 import type { JSX } from 'react/jsx-runtime';
 
-export default function UserIconComponent(
+export default function UserIcon(
   props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
 ) {
   return (

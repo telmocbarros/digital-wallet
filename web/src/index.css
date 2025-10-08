@@ -1,14 +1,19 @@
 @import "tailwindcss";
 
-@import './styles/base/reset.css';
-/* Section 0 */
-@import './styles/tokens/variables.css';
-/* Section 1 */
-@import './styles/base/global.css';
-/* Section 2 */
-@import './styles/base/typography.css';
-/* Section 3 */
-@import './styles/base/responsive.css';
-/* Section 4 */
-@import './styles/base/accessibility.css';
-/* Section 5 */
+@layer base {
+    /* Element-level resets and defaults */
+    @import './styles/base/reset.css';
+    @import './styles/base/global.css';
+    @import './styles/base/typography.css';
+}
+
+@layer components {
+    /* Design tokens and reusable component styles */
+    @import './styles/tokens/variables.css';
+}
+
+@layer utilities {
+    /* Responsive and accessibility utilities */
+    @import './styles/base/responsive.css';
+    @import './styles/base/accessibility.css';
+}

@@ -23,6 +23,8 @@ export default function SearchBar({
     <div className={`search-container ${className}`}>
       <SearchIcon className="search-icon" />
       <Input
+        id="search-input"
+        name="search"
         type="text"
         placeholder={placeholder}
         onChange={handleChange}

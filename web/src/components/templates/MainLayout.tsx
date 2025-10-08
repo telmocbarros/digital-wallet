@@ -34,14 +34,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
         onHamburgerIconClick={handleMenuIconClick}
       />
 
-      <SlideMenu isOpen={displayAppMenu} side="left">
-        <ul>
-          <li className="font-extrabold">Dashboard</li>
-          <li>Transactions</li>
-          <li>Wallet</li>
-        </ul>
-      </SlideMenu>
-
       <SlideMenu isOpen={displaySettingsMenu} side="right">
         <ul>
           <li>Profile</li>
