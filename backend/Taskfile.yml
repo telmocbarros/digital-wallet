@@ -5,6 +5,11 @@ vars:
   MAIN_PATH: ./cmd/api/main.go
 
 tasks:
+  tidy:
+    desc: Run code formatting and linting
+    cmds:
+      - go fmt ./...
+      - go tidy -v
   dev:
     desc: Start the development server
     cmds:
