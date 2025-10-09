@@ -39,9 +39,12 @@ func main() {
 	authHandler := auth.NewHandler(authService)
 	authMiddleware := auth.NewMiddleware(authService)
 
-	// Public routes
+	// Register routes
+	auth.RegisterRoutes(r, authHandler, authMiddleware)
+	user.RegisterRoutes(r, userHandler, authMiddleware)
+
+	// Login route (combines user auth + token generation)
 	r.POST("/login", func(c *gin.Context) {
-		// First, handle login through user handler
 		var req user.LoginRequest
 		if err := c.BindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password are required"})
@@ -68,18 +71,6 @@ func main() {
 
 		c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
 	})
-
-	r.GET("/auth/status", authHandler.Status)
-	r.POST("/refresh", authHandler.Refresh)
-
-	// Protected routes
-	r.GET("/", authMiddleware.Authenticate, func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "Welcome back!"})
-	})
-
-	r.POST("/logout", authMiddleware.Authenticate, authHandler.Logout)
-	r.GET("/users", authMiddleware.Authenticate, userHandler.List)
-	r.POST("/users", authMiddleware.Authenticate, userHandler.Create)
 
 	// Start server
 	fmt.Println("Server started at PORT 8080")
