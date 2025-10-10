@@ -10,13 +10,12 @@ import (
 )
 
 type UserService interface {
-	Login(email, password string) (*pkg.UserDTO, error)
-	GetByID(userID string) (*pkg.UserDTO, error)
+	Authenticate(email, password string) (*pkg.UserDTO, error)
 }
 
 const (
-	AccessTokenExpiry  = 30 * time.Second // 30 seconds for testing
-	RefreshTokenExpiry = 5 * time.Minute  // 5 minutes for testing
+	AccessTokenExpiry  = 15 * time.Minute // 15 minutes for testing
+	RefreshTokenExpiry = 24 * time.Hour   // 24 hours for testing
 )
 
 // Service handles authentication business logic
@@ -40,7 +39,7 @@ func NewService(repo Repository, userService UserService, accessTokenSecret, ref
 // AuthenticateUser authenticates a user by email and password
 // It delegates to the user service for credential verification
 func (s *Service) AuthenticateUser(email, password string) (string, string, error) {
-	userDTO, err := s.userService.Login(email, password)
+	userDTO, err := s.userService.Authenticate(email, password)
 	if err != nil {
 		return "", "", err
 	}

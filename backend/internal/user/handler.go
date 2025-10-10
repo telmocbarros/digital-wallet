@@ -18,34 +18,6 @@ func NewHandler(service *Service) *Handler {
 	return &Handler{service: service}
 }
 
-// Login handles user login
-// POST /login
-func (h *Handler) Login(c *gin.Context) {
-	var req pkg.LoginRequest
-	if err := c.BindJSON(&req); err != nil {
-		log.Println("Invalid login request:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password are required"})
-		return
-	}
-
-	// Authenticate user
-	userDTO, err := h.service.Login(req.Email, req.Password)
-	if err != nil {
-		if err == pkg.ErrInvalidCredentials || err == pkg.ErrUserNotFound {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
-			return
-		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-		return
-	}
-
-	// Return user data (tokens will be set by auth handler)
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Login successful",
-		"user":    userDTO,
-	})
-}
-
 // Create handles user registration
 // POST /users
 func (h *Handler) Create(c *gin.Context) {
@@ -90,4 +62,29 @@ func (h *Handler) List(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, users)
+}
+
+// Retrieve a single user
+// GET /users/id
+func (h *Handler) GetById(c *gin.Context) {
+	requestUserId := c.Query("userId")
+	ctxUserId := c.GetString("userId")
+
+	if ctxUserId != requestUserId {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request parameters"})
+		return
+	}
+
+	userDTO, err := h.service.GetByID(requestUserId)
+	if err != nil {
+		if err == pkg.ErrUserNotFound {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+			return
+		}
+		log.Println("Error retrieving user:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	c.JSON(http.StatusOK, userDTO)
 }

@@ -10,7 +10,7 @@ type UserDTO struct {
 }
 
 // LoginRequest represents the login payload
-type LoginRequest struct {
+type LoginCredentials struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }

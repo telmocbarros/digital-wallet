@@ -32,7 +32,7 @@ func (s *Service) Register(email, password, firstName, lastName string) (*pkg.Us
 }
 
 // Login authenticates a user with email and password
-func (s *Service) Login(email, password string) (*pkg.UserDTO, error) {
+func (s *Service) Authenticate(email, password string) (*pkg.UserDTO, error) {
 	// Validate input
 	if email == "" || password == "" {
 		return nil, pkg.ErrMissingField

@@ -78,7 +78,7 @@ func (h *Handler) Refresh(c *gin.Context) {
 // Login
 // POST /login
 func (h *Handler) Login(c *gin.Context) {
-	var req pkg.LoginRequest
+	var req pkg.LoginCredentials
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password are required"})
 		return
@@ -138,8 +138,8 @@ func (h *Handler) SetTokenCookies(c *gin.Context, accessToken, refreshToken stri
 
 // setTokenCookies sets access and refresh token cookies
 func (h *Handler) setTokenCookies(c *gin.Context, accessToken, refreshToken string) {
-	c.SetCookie("access_token", accessToken, 30, "/", "", false, true)    // 30 seconds
-	c.SetCookie("refresh_token", refreshToken, 300, "/", "", false, true) // 300 seconds (5 minutes)
+	c.SetCookie("access_token", accessToken, 15*60, "/", "", false, true)      // 15 minutes
+	c.SetCookie("refresh_token", refreshToken, 24*60*60, "/", "", false, true) // 24 hours
 }
 
 // clearTokenCookies removes access and refresh token cookies
