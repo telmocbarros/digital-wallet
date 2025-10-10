@@ -6,7 +6,7 @@ type Card struct {
 	EntityID   string `json:"entity"`
 	CardHolder string `json:"card_holder"`
 	CVC        string `json:"cvc"`
-	ExpiryDate string `json:"expiry_date"`
+	ExpiryDate int64  `json:"expiry_date"`
 }
 
 type CardDTO struct {

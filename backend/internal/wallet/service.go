@@ -9,13 +9,13 @@ func NewService(repo Repository) *Service {
 }
 
 // Create a new wallet
-func (s *Service) CreateWallet(userId string) error {
-	_, err := s.repo.Create(userId)
+func (s *Service) CreateWallet(userId string) (string, error) {
+	walletID, err := s.repo.Create(userId)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return walletID, nil
 }
 
 func (s *Service) GetWalletByID(walletId string) (*Wallet, error) {
@@ -36,12 +36,22 @@ func (s *Service) GetWalletByUserID(userID string) (*Wallet, error) {
 	return wallet, nil
 }
 
-func (s *Service) AddCard(walletID string, card *CardDTO) error {
-	if err := s.repo.AddCard(walletID, card); err != nil {
-		return err
+func (s *Service) AddCard(walletID string, card *CardDTO) (string, error) {
+	cardId, err := s.repo.AddCard(walletID, card)
+	if err != nil {
+		return "", err
 	}
 
-	return nil
+	return cardId, nil
+}
+
+func (s *Service) GetCard(walletID, cardID string) (*Card, error) {
+	card, err := s.repo.GetCard(walletID, cardID)
+	if err != nil {
+		return nil, err
+	}
+
+	return card, nil
 }
 
 func (s *Service) RemoveCard(walletID, cardID string) error {
