@@ -11,9 +11,9 @@ import (
 type Repository interface {
 	GetByEmail(email string) (*User, error)
 	GetByID(id string) (*User, error)
-	GetAll() ([]UserDTO, error)
+	GetAll() ([]pkg.UserDTO, error)
 	Create(email, password, firstName, lastName string) (*User, error)
-	VerifyCredentials(email, password string) (*UserDTO, error)
+	VerifyCredentials(email, password string) (*pkg.UserDTO, error)
 }
 
 // inMemoryRepository implements Repository using in-memory storage
@@ -52,8 +52,8 @@ func (r *inMemoryRepository) GetByID(id string) (*User, error) {
 }
 
 // GetAll retrieves all users (returns DTOs without passwords)
-func (r *inMemoryRepository) GetAll() ([]UserDTO, error) {
-	dtos := make([]UserDTO, 0, len(r.users))
+func (r *inMemoryRepository) GetAll() ([]pkg.UserDTO, error) {
+	dtos := make([]pkg.UserDTO, 0, len(r.users))
 	for _, user := range r.users {
 		dtos = append(dtos, user.ToDTO())
 	}
@@ -87,7 +87,7 @@ func (r *inMemoryRepository) Create(email, password, firstName, lastName string)
 }
 
 // VerifyCredentials checks if email/password combination is valid
-func (r *inMemoryRepository) VerifyCredentials(email, password string) (*UserDTO, error) {
+func (r *inMemoryRepository) VerifyCredentials(email, password string) (*pkg.UserDTO, error) {
 	user, err := r.GetByEmail(email)
 	if err != nil {
 		return nil, pkg.ErrInvalidCredentials

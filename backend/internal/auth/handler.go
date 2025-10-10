@@ -75,6 +75,36 @@ func (h *Handler) Refresh(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Access token refreshed successfully"})
 }
 
+// Login
+// POST /login
+func (h *Handler) Login(c *gin.Context) {
+	var req pkg.LoginRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password are required"})
+		return
+	}
+
+	// Authenticate user
+	userID, userEmail, err := h.service.AuthenticateUser(req.Email, req.Password)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		return
+	}
+
+	// Generate tokens
+	tokenPair, err := h.service.GenerateTokens(userID, userEmail)
+	if err != nil {
+		log.Println("Error generating tokens:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	// Set tokens as cookies
+	h.SetTokenCookies(c, tokenPair.AccessToken, tokenPair.RefreshToken)
+
+	c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
+}
+
 // Logout revokes the refresh token and clears cookies
 // POST /logout (requires authentication)
 func (h *Handler) Logout(c *gin.Context) {

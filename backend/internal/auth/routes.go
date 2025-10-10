@@ -9,6 +9,7 @@ import (
 // RegisterRoutes sets up all auth-related routes
 func RegisterRoutes(router *gin.Engine, authHandler *Handler, authMiddleware *Middleware) {
 	// Public routes
+	router.POST("/login", authHandler.Login)
 	router.GET("/auth/status", authHandler.Status)
 	router.POST("/refresh", authHandler.Refresh)
 

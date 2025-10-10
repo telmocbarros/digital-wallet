@@ -9,6 +9,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+type UserService interface {
+	Login(email, password string) (*pkg.UserDTO, error)
+	GetByID(userID string) (*pkg.UserDTO, error)
+}
+
 const (
 	AccessTokenExpiry  = 30 * time.Second // 30 seconds for testing
 	RefreshTokenExpiry = 5 * time.Minute  // 5 minutes for testing
@@ -16,18 +21,31 @@ const (
 
 // Service handles authentication business logic
 type Service struct {
-	repo                 Repository
-	accessTokenSecret    string
-	refreshTokenSecret   string
+	repo               Repository
+	userService        UserService
+	accessTokenSecret  string
+	refreshTokenSecret string
 }
 
 // NewService creates a new auth service
-func NewService(repo Repository, accessTokenSecret, refreshTokenSecret string) *Service {
+func NewService(repo Repository, userService UserService, accessTokenSecret, refreshTokenSecret string) *Service {
 	return &Service{
-		repo:                 repo,
-		accessTokenSecret:    accessTokenSecret,
-		refreshTokenSecret:   refreshTokenSecret,
+		repo:               repo,
+		userService:        userService,
+		accessTokenSecret:  accessTokenSecret,
+		refreshTokenSecret: refreshTokenSecret,
 	}
+}
+
+// AuthenticateUser authenticates a user by email and password
+// It delegates to the user service for credential verification
+func (s *Service) AuthenticateUser(email, password string) (string, string, error) {
+	userDTO, err := s.userService.Login(email, password)
+	if err != nil {
+		return "", "", err
+	}
+
+	return userDTO.ID, userDTO.Email, nil
 }
 
 // GenerateTokens creates a new access and refresh token pair for a user

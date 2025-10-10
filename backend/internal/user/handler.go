@@ -21,7 +21,7 @@ func NewHandler(service *Service) *Handler {
 // Login handles user login
 // POST /login
 func (h *Handler) Login(c *gin.Context) {
-	var req LoginRequest
+	var req pkg.LoginRequest
 	if err := c.BindJSON(&req); err != nil {
 		log.Println("Invalid login request:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password are required"})
@@ -49,7 +49,7 @@ func (h *Handler) Login(c *gin.Context) {
 // Create handles user registration
 // POST /users
 func (h *Handler) Create(c *gin.Context) {
-	var req CreateUserRequest
+	var req pkg.CreateUserRequest
 	if err := c.BindJSON(&req); err != nil {
 		log.Println("Invalid create user request:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})

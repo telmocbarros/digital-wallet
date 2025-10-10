@@ -15,7 +15,7 @@ func NewService(repo Repository) *Service {
 }
 
 // Register creates a new user account
-func (s *Service) Register(email, password, firstName, lastName string) (*UserDTO, error) {
+func (s *Service) Register(email, password, firstName, lastName string) (*pkg.UserDTO, error) {
 	// Validate input
 	if email == "" || password == "" || firstName == "" || lastName == "" {
 		return nil, pkg.ErrMissingField
@@ -32,7 +32,7 @@ func (s *Service) Register(email, password, firstName, lastName string) (*UserDT
 }
 
 // Login authenticates a user with email and password
-func (s *Service) Login(email, password string) (*UserDTO, error) {
+func (s *Service) Login(email, password string) (*pkg.UserDTO, error) {
 	// Validate input
 	if email == "" || password == "" {
 		return nil, pkg.ErrMissingField
@@ -48,7 +48,7 @@ func (s *Service) Login(email, password string) (*UserDTO, error) {
 }
 
 // GetByID retrieves a user by ID
-func (s *Service) GetByID(id string) (*UserDTO, error) {
+func (s *Service) GetByID(id string) (*pkg.UserDTO, error) {
 	user, err := s.repo.GetByID(id)
 	if err != nil {
 		return nil, err
@@ -59,6 +59,6 @@ func (s *Service) GetByID(id string) (*UserDTO, error) {
 }
 
 // GetAll retrieves all users
-func (s *Service) GetAll() ([]UserDTO, error) {
+func (s *Service) GetAll() ([]pkg.UserDTO, error) {
 	return s.repo.GetAll()
 }

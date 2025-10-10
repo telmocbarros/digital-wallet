@@ -32,7 +32,7 @@ func main() {
 
 	// Initialize services
 	userService := user.NewService(userRepo)
-	authService := auth.NewService(authRepo, config.ACCESS_TOKEN_SECRET, config.REFRESH_TOKEN_SECRET)
+	authService := auth.NewService(authRepo, userService, config.ACCESS_TOKEN_SECRET, config.REFRESH_TOKEN_SECRET)
 
 	// Initialize handlers
 	userHandler := user.NewHandler(userService)
@@ -42,35 +42,6 @@ func main() {
 	// Register routes
 	auth.RegisterRoutes(r, authHandler, authMiddleware)
 	user.RegisterRoutes(r, userHandler, authMiddleware)
-
-	// Login route (combines user auth + token generation)
-	r.POST("/login", func(c *gin.Context) {
-		var req user.LoginRequest
-		if err := c.BindJSON(&req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password are required"})
-			return
-		}
-
-		// Authenticate user
-		userDTO, err := userService.Login(req.Email, req.Password)
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
-			return
-		}
-
-		// Generate tokens
-		tokenPair, err := authService.GenerateTokens(userDTO.ID, userDTO.Email)
-		if err != nil {
-			log.Println("Error generating tokens:", err)
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
-			return
-		}
-
-		// Set tokens as cookies
-		authHandler.SetTokenCookies(c, tokenPair.AccessToken, tokenPair.RefreshToken)
-
-		c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
-	})
 
 	// Start server
 	fmt.Println("Server started at PORT 8080")
