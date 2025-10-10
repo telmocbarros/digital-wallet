@@ -15,6 +15,8 @@ var (
 	ErrUserALreadyHasAWallet = errors.New("user already has a wallet")
 	ErrCardAlreadyExists     = errors.New("card already exists within wallet")
 	ErrCardNotFound          = errors.New("card not found in wallet")
+	ErrEntityNotFound        = errors.New("entity not found")
+	ErrInvalidExpiryDate     = errors.New("invalid expiry date")
 )
 
 // Auth errors

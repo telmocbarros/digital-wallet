@@ -20,12 +20,24 @@ type Repository interface {
 
 // inMemoryRepository implements Repository using in-memory storage
 type inMemoryRepository struct {
-	wallets []Wallet
+	wallets  []Wallet
+	entities map[string]string
 }
 
 func NewRepository() Repository {
+
 	return &inMemoryRepository{
 		wallets: []Wallet{},
+		entities: map[string]string{
+			"BCP - Millenium BCP":            "21b40fd7-6699-46aa-a0ca-eccb9ca1724a",
+			"CGD - Caixa Geral de Depósitos": "21c160fb-cd7b-4a14-a489-47c30329f8c0",
+			"Banco Santander":                "2e5cbd3b-5943-437a-984b-62a3e4961601",
+			"Banco BPI":                      "1a260633-e11b-4dfb-9d0c-f137f17b60fc",
+			"Banco Montepio":                 "a6dcd5a3-d3df-489c-b00b-6023ee1acc5b",
+			"Banco CTT":                      "fed2683f-a3f8-4ae8-b5e9-dd65e0f15e4e",
+			"ActivoBank":                     "80f31edb-3eee-461d-95cf-1043da97b145",
+			"BES - Banco Espírito Santo":     "eae1e102-19cd-4cb4-a09c-e35cf0554c6d",
+		},
 	}
 }
 
@@ -77,6 +89,25 @@ func (r *inMemoryRepository) GetByUserID(userID string) (*Wallet, error) {
 
 // AddCard implements Repository.
 func (r *inMemoryRepository) AddCard(walletID string, card *CardDTO) (string, error) {
+	// Validate entity exists
+	entityID, ok := r.entities[card.Entity]
+
+	if !ok {
+		log.Println("Error: Entity not found when trying to add a card to the wallet", card.Entity)
+		return "", pkg.ErrEntityNotFound
+	}
+
+	// Validate and parse expiry date
+	expiryDate, err := time.Parse(timeFormat, card.ExpiryDate)
+	if err != nil {
+		log.Println("Error: invalid expiry date format", card.ExpiryDate, err)
+		return "", pkg.ErrInvalidExpiryDate
+	}
+	if expiryDate.Before(time.Now()) {
+		log.Println("Error: expiry date is in the past", card.ExpiryDate)
+		return "", pkg.ErrInvalidExpiryDate
+	}
+
 	// Find wallet by index to modify the actual slice element
 	// IMPORTANT: We must use the index approach here instead of taking the address
 	// of the loop variable (&w) because Go reuses the loop variable in each iteration.
@@ -105,15 +136,10 @@ func (r *inMemoryRepository) AddCard(walletID string, card *CardDTO) (string, er
 		}
 	}
 
-	expiryDate, err := time.Parse(timeFormat, card.ExpiryDate)
-	if err != nil {
-		log.Println("Error: invalid expiry date format", card.ExpiryDate, err)
-		return "", err
-	}
-
 	newCard := Card{
 		ID:         uuid.New().String(),
 		CardNumber: card.CardNumber,
+		EntityID:   entityID,
 		ExpiryDate: expiryDate.Unix(),
 		CVC:        card.CVC,
 		CardHolder: card.CardHolder,
