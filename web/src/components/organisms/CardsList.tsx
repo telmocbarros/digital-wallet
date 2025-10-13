@@ -4,7 +4,7 @@ import RedwaveBankCard from '../cards_delete_in_the_future/RedBank/ReactComponen
 import YellowwaveBankCard from '../cards_delete_in_the_future/YellowBank/ReactComponent/YelloCardComponent';
 import './CardsList.css';
 
-export default function CardsList({ className }) {
+export default function CardsList({ className }: { className?: string } = {}) {
   // Temporary array representing our cards
   const cards = [
     {
