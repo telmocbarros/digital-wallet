@@ -7,17 +7,20 @@ import type { User, Wallet, Card, Transaction } from '../shared/types';
  * Uses shared types from shared/types.
  */
 
-export const dummy_users: User[] = [
+export type DummyUser = User & { password: string };
+export const dummy_users: DummyUser[] = [
   {
     id: 'user_1_9f1a2b3c',
     name: 'Alice Santos',
     email: 'alice@example.com',
+    password: 'password123',
     createdAt: '2024-01-15T09:30:00.000Z',
   },
   {
     id: 'user_2_a7c4d5e6',
     name: 'Bob Oliveira',
     email: 'bob@example.com',
+    password: 'securepass',
     createdAt: '2024-02-02T14:20:00.000Z',
   },
 ];
