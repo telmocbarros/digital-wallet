@@ -4,7 +4,7 @@ import { useAuth } from './features/auth/hooks/useAuth';
 import { useTheme } from './hooks/useTheme';
 import LoginForm from './features/auth/components/LoginForm';
 import AuthLayout from './components/templates/AuthLayout';
-import MainLayout from './components/templates/MainLayout';
+// import MainLayout from './components/templates/MainLayout';
 
 function App() {
   const { /*isLoggedIn,*/ login /*, logout*/ } = useAuth();
@@ -31,18 +31,11 @@ function App() {
           <LoginForm onSubmit={handleLogin} />
         </AuthLayout>
       )}
-      {isLoggedIn && (
+      {/* {isLoggedIn && (
         <MainLayout>
-          <h1>Do Something</h1>
-          <button
-            onClick={() => {
-              alert('Clicked!');
-            }}
-          >
-            Click Me
-          </button>
+          <Dashboard />
         </MainLayout>
-      )}
+      )} */}
     </>
   );
 }

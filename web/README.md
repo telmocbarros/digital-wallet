@@ -95,3 +95,11 @@ export default defineConfig([
 
 <a href="https://www.flaticon.com/free-icons/uk-flag" title="uk flag icons">Uk flag icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/portugal" title="portugal icons">Portugal icons created by verluk - Flaticon</a>
+
+## Side Bar stock market icon
+
+<a href="https://www.flaticon.com/free-icons/monitor" title="monitor icons">Monitor icons created by TgSoft - Flaticon</a>
+
+## Side Bar Invoice icon
+
+<a href="https://www.flaticon.com/free-icons/invoice" title="invoice icons">Invoice icons created by Anggara - Flaticon</a>

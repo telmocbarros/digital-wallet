@@ -21,7 +21,7 @@ export default function Navbar({
   return (
     <nav className="main-navbar">
       <div className="navbar-brand">
-        <DigitalWalletIcon onClick={onAppIconClick} className="navbar-icon " />
+        <DigitalWalletIcon onClick={onAppIconClick} className="navbar-icon" />
         <span className="navbar-title">Cozy Wallet</span>
       </div>
       <div className="navbar-center">

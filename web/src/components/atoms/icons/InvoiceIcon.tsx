@@ -1,0 +1,35 @@
+import type { JSX, SVGProps } from 'react';
+
+function InvoiceIcon(props: SVGProps<SVGSVGElement>): JSX.Element {
+  return (
+    <svg
+      version="1.0"
+      xmlns="http://www.w3.org/2000/svg"
+      width="64.000000pt"
+      height="64.000000pt"
+      viewBox="0 0 64.000000 64.000000"
+      preserveAspectRatio="xMidYMid meet"
+      {...props}
+    >
+      <g
+        transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)"
+        fill="currentColor"
+        stroke="none"
+      >
+        <path
+          d="M92 600 c-18 -11 -41 -34 -52 -52 -18 -30 -20 -51 -20 -260 l0 -228
+24 -15 c22 -14 27 -14 61 2 36 17 38 17 75 -5 49 -28 71 -28 120 0 37 22 39
+22 75 5 34 -16 39 -16 61 -2 23 15 24 21 24 115 l0 100 55 0 c46 0 60 4 80 25
+24 23 25 30 25 139 0 195 -1 196 -287 196 -190 0 -211 -2 -241 -20z m468 -40
+c18 -18 20 -33 20 -128 0 -71 -4 -112 -12 -120 -7 -7 -34 -12 -60 -12 l-48 0
+0 120 c0 107 2 122 20 140 11 11 29 20 40 20 11 0 29 -9 40 -20z m-195 -160
+c0 -12 -21 -16 -119 -18 -115 -3 -146 4 -131 27 4 8 47 11 128 9 101 -3 122
+-6 122 -18z m-70 -120 c0 -12 -18 -16 -89 -18 -87 -3 -115 5 -101 27 4 8 38
+11 98 9 74 -2 92 -6 92 -18z"
+        />
+      </g>
+    </svg>
+  );
+}
+
+export default InvoiceIcon;

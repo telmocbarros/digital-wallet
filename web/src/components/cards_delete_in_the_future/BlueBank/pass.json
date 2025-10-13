@@ -1,0 +1,25 @@
+{
+  "formatVersion": 1,
+  "passTypeIdentifier": "pass.com.example.bluewavebank",
+  "serialNumber": "BW123456789",
+  "teamIdentifier": "ABCDE12345",
+  "organizationName": "Bluewave Bank",
+  "description": "Sample financial pass",
+  "foregroundColor": "rgb(255,255,255)",
+  "backgroundColor": "rgb(0,122,255)",
+  "labelColor": "rgb(255,255,255)",
+  "logoText": "Bluewave Bank",
+  "barcode": {
+    "message": "1234567890",
+    "format": "PKBarcodeFormatQR",
+    "messageEncoding": "iso-8859-1"
+  },
+  "generic": {
+    "primaryFields": [
+      { "key": "balance", "label": "Balance", "value": "$5,000" }
+    ],
+    "secondaryFields": [
+      { "key": "account", "label": "Account", "value": "**** 1234" }
+    ]
+  }
+}

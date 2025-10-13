@@ -1,13 +1,10 @@
-import { type ReactNode, useState } from 'react';
+import { useState } from 'react';
 import './MainLayout.css';
 import Navbar from '../organisms/Navbar';
 import SlideMenu from '../organisms/SlideMenu';
+import { Outlet } from 'react-router';
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
-
-export default function MainLayout({ children }: MainLayoutProps) {
+export default function MainLayout() {
   const [displayAppMenu, setDisplayAppMenu] = useState(false);
   const [displaySettingsMenu, setDisplaySettingsMenu] = useState(false);
 
@@ -36,7 +33,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
         </ul>
       </SlideMenu>
 
-      <div className="content">{children}</div>
+      <div className="content">
+        <Outlet />
+      </div>
     </>
   );
 }
