@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './MainLayout.css';
 import Navbar from '../organisms/Navbar';
 import SlideMenu from '../organisms/SlideMenu';
 import { Outlet } from 'react-router';
@@ -25,12 +24,11 @@ export default function MainLayout() {
         onAppIconClick={handleAppIconClick}
         onHamburgerIconClick={handleMenuIconClick}
       />
-      <div className="main-layout-container">
+      <div className="fixed top-[60px] left-0 right-0 bottom-0 flex flex-row overflow-hidden">
         <SideBar />
-        <div className="content">
-          <h1>content</h1>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4">
           <Outlet />
-        </div>
+        </main>
       </div>
 
       <SlideMenu isOpen={displaySettingsMenu} side="right">

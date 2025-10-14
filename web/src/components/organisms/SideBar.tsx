@@ -2,7 +2,7 @@ import NavItem from '../molecules/NavItem';
 
 export default function SideBar() {
   return (
-    <div className="h-full flex flex-col justify-between">
+    <aside className="w-56 flex-shrink-0 flex flex-col justify-between overflow-y-auto">
       <div>
         <NavItem name="home" label="Home" />
         <NavItem name="transactions" label="Transactions" />
@@ -13,6 +13,6 @@ export default function SideBar() {
         <NavItem name="help" label="Help" />
         <NavItem name="settings" label="Logout" />
       </div>
-    </div>
+    </aside>
   );
 }
