@@ -1,4 +1,5 @@
 .main-navbar {
+  --navbar-height: 60px; /* Define navbar height as a CSS variable */
   position: fixed;
   left: 0;
   top: 0;
@@ -7,6 +8,7 @@
   align-items: center;
   padding: 0.75rem 1rem;
   width: 100%;
+  height: var(--navbar-height);
   box-shadow: var(--shadow-sm);
   background-color: var(--color-bg-menu);
   z-index: 1000;

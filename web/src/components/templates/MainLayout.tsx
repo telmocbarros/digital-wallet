@@ -3,6 +3,7 @@ import './MainLayout.css';
 import Navbar from '../organisms/Navbar';
 import SlideMenu from '../organisms/SlideMenu';
 import { Outlet } from 'react-router';
+import SideBar from '../organisms/SideBar';
 
 export default function MainLayout() {
   const [displayAppMenu, setDisplayAppMenu] = useState(false);
@@ -24,6 +25,13 @@ export default function MainLayout() {
         onAppIconClick={handleAppIconClick}
         onHamburgerIconClick={handleMenuIconClick}
       />
+      <div className="main-layout-container">
+        <SideBar />
+        <div className="content">
+          <h1>content</h1>
+          <Outlet />
+        </div>
+      </div>
 
       <SlideMenu isOpen={displaySettingsMenu} side="right">
         <ul>
@@ -32,10 +40,6 @@ export default function MainLayout() {
           <li>Logout</li>
         </ul>
       </SlideMenu>
-
-      <div className="content">
-        <Outlet />
-      </div>
     </>
   );
 }

@@ -6,24 +6,34 @@ import App from './App.tsx';
 
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import MainLayout from './components/templates/MainLayout.tsx';
-import Dashboard from './pages/Dashboard.tsx';
-import { TestPage } from './pages/TestPage.tsx';
+import DashboardPage from './pages/DashboardPage.tsx';
+import TransactionsPage from './pages/TransactionsPage.tsx';
+import BankCardsPage from './pages/BankCardsPage.tsx';
+import SettingsPage from './pages/SettingsPage.tsx';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-  },
   {
     element: <MainLayout />,
     children: [
       {
-        path: '/dashboard',
-        element: <Dashboard />,
+        path: '/',
+        element: <App />,
       },
       {
-        path: '/test',
-        element: <TestPage />,
+        path: '/dashboard',
+        element: <DashboardPage />,
+      },
+      {
+        path: '/transactions',
+        element: <TransactionsPage />,
+      },
+      {
+        path: '/cards',
+        element: <BankCardsPage />,
+      },
+      {
+        path: '/settings',
+        element: <SettingsPage />,
       },
     ],
   },

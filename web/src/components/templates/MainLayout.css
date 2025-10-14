@@ -1,3 +1,13 @@
+/* Main layout container - positions content below navbar */
+.main-layout-container {
+  margin-top: var(--navbar-height, 60px); /* Fallback to 60px if variable not set */
+  min-height: calc(100vh - var(--navbar-height, 60px)); /* Full viewport height minus navbar */
+  display: flex;
+  flex-direction: row;
+}
+
+/* Content area takes remaining space */
 .content {
-    padding-top: 4.5rem;
+  flex: 1;
+  overflow-y: auto; /* Allow scrolling if content exceeds viewport */
 }
