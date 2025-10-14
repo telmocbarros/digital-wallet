@@ -38,6 +38,55 @@ Frontend Integration:
 Current Status: Basic authentication system working with cookie-based sessions
 between React frontend and Go backend.
 
+## Tuesday, October 14th 2025
+
+### Ledger service
+
+A microservice whose focus is to maintain the integrity of the applications's accounting system for my wallet. It implements double-entry bookeeping.
+
+### Double-entry bookeeping
+
+Every transaction that occurs in the system must create two entries:
+
+- **credit**: money entering the account
+- **debit**: money leaving the account
+
+This ensures that the system is always balanced.
+
+### Benefits
+
+- Immutable entries
+
+```SQL
+  -- GOOD: Immutable ledger entries
+  INSERT INTO ledger_entries (wallet_id, amount, type, transaction_id)
+  VALUES
+    ('alice_wallet', -50, 'DEBIT', 'txn_123'),
+    ('bob_wallet', 50, 'CREDIT', 'txn_123');
+
+  -- Balance is CALCULATED from entries
+  SELECT SUM(amount) FROM ledger_entries WHERE wallet_id = 'alice_wallet';
+```
+
+- Keep a trail of every transaction on the system
+- System is provably consistent
+
+### How It Fits Your Architecture
+
+```mermaid
+graph TD
+    U[User] -->|Send Money| TS[Transaction Service]
+    TS -->|Validate request| V[Validation]
+    V -->|Emit: TransactionInitiated event| K[Kafka]
+    K -->|Consumed: TransactionInitiated| LS[Ledger Service]
+    LS -->|Create double-entry ledger entries| LedgerDB[(Ledger Entries DB)]
+    LS -->|Emit: TransactionCompleted event| K
+    K -->|Consumed: TransactionCompleted| TS
+    TS -->|Update status| TransactionDB[(Transaction DB)]
+    TS -->|Trigger notification| NS[Notification Service]
+    NS -->|Alert users| U
+```
+
 # Set up JWT token with GoLang
 
 https://www.youtube.com/watch?v=XFxm6NEWakQ&t=621s
