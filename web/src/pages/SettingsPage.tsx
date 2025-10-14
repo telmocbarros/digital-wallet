@@ -33,9 +33,9 @@ export default function SettingsPage() {
 
       {/* Chosen Settings View */}
       <div className="max-h-[600px] overflow-y-auto">
-        {/* <Account /> */}
+        <Account />
         {/* <Profile /> */}
-        <Appearance />
+        {/* <Appearance /> */}
       </div>
     </div>
   );
