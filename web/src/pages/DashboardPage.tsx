@@ -1,15 +1,11 @@
 import BalanceCard from '../components/molecules/BalanceCard';
 import TableHeader from '../components/molecules/TableHeader';
 import CardsList from '../components/organisms/CardsList';
-// import SideBar from '../components/organisms/SideBar';
 import TransactionsList from '../components/organisms/TransactionsList';
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-row w-screen h-full py-2.5">
-      {/* <div className="flex-1">
-        <SideBar />
-      </div> */}
+    <div className="flex flex-row h-full py-2.5">
       <div className="flex-2 flex flex-col">
         <h1 className="text-2xl font-bold mb-4">My Cards</h1>
         <CardsList className="mb-4" />
