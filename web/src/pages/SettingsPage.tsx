@@ -1,6 +1,7 @@
 import Account from './Settings/Account';
 import Appearance from './Settings/Appearance';
 import Profile from './Settings/Profile';
+import Security from './Settings/Security';
 
 export default function SettingsPage() {
   return (
@@ -34,7 +35,7 @@ export default function SettingsPage() {
       {/* Chosen Settings View */}
       <div className="max-h-[600px] overflow-y-auto">
         {/* <Account /> */}
-        <Profile />
+        {/* <Profile /> */}
         <Security />
         {/* <Appearance /> */}
       </div>
