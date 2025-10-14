@@ -3,6 +3,7 @@ package main
 import (
 	"digitalwallet/backend/config"
 	"digitalwallet/backend/internal/auth"
+	"digitalwallet/backend/internal/ledger"
 	"digitalwallet/backend/internal/user"
 	"digitalwallet/backend/internal/wallet"
 	"fmt"
@@ -31,22 +32,26 @@ func main() {
 	userRepo := user.NewRepository()
 	authRepo := auth.NewRepository()
 	walletRepo := wallet.NewRepository()
+	ledgerRepo := ledger.NewRepository()
 
 	// Initialize services
 	userService := user.NewService(userRepo)
 	authService := auth.NewService(authRepo, userService, config.ACCESS_TOKEN_SECRET, config.REFRESH_TOKEN_SECRET)
 	walletService := wallet.NewService(walletRepo)
+	ledgerService := ledger.NewService(ledgerRepo)
 
 	// Initialize handlers
 	authHandler := auth.NewHandler(authService)
 	authMiddleware := auth.NewMiddleware(authService)
 	userHandler := user.NewHandler(userService)
 	walletHandler := wallet.NewHandler(walletService)
+	ledgerHandler := ledger.NewHandler(ledgerService)
 
 	// Register routes
 	auth.RegisterRoutes(r, authHandler, authMiddleware)
 	user.RegisterRoutes(r, userHandler, authMiddleware)
 	wallet.RegisterRoutes(r, walletHandler, authMiddleware)
+	ledger.RegisterRoutes(r, ledgerHandler, authMiddleware)
 
 	// Start server
 	fmt.Println("Server started at PORT 8080")
