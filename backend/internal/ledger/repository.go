@@ -1,6 +1,7 @@
 package ledger
 
 import (
+	"digitalwallet/backend/pkg/currency"
 	"errors"
 	"log"
 	"time"
@@ -9,10 +10,10 @@ import (
 )
 
 var (
-	ErrLedgerEntryNotFound      = errors.New("ledger entry not found")
-	ErrAccountBalanceNotFound   = errors.New("account balance not found")
-	ErrTransactionNotBalanced   = errors.New("transaction entries do not sum to zero")
-	ErrInsufficientBalance      = errors.New("insufficient balance for this operation")
+	ErrLedgerEntryNotFound    = errors.New("ledger entry not found")
+	ErrAccountBalanceNotFound = errors.New("account balance not found")
+	ErrTransactionNotBalanced = errors.New("transaction entries do not sum to zero")
+	ErrInsufficientBalance    = errors.New("insufficient balance for this operation")
 )
 
 // Repository defines the interface for ledger data operations
@@ -170,7 +171,7 @@ func (r *inMemoryRepository) CreateOrUpdateBalance(accountID, accountType string
 			AccountID:   accountID,
 			AccountType: accountType,
 			Balance:     amountChange,
-			Currency:    CurrencyUSD, // Default currency
+			Currency:    currency.CurrencyUSD, // Default currency
 			UpdatedAt:   time.Now().Unix(),
 			LastEntryID: lastEntryID,
 		}

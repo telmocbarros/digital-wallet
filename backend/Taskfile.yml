@@ -9,7 +9,7 @@ tasks:
     desc: Run code formatting and linting
     cmds:
       - go fmt ./...
-      - go tidy -v
+      - go mod tidy
   dev:
     desc: Start the development server
     cmds:

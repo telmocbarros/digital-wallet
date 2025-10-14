@@ -1,6 +1,7 @@
 package ledger
 
 import (
+	"digitalwallet/backend/pkg/currency"
 	"testing"
 )
 
@@ -35,7 +36,7 @@ func TestTransferBasic(t *testing.T) {
 	if aliceBalance.Balance != 10000 {
 		t.Errorf("Expected Alice's balance to be 10000, got %d", aliceBalance.Balance)
 	}
-	t.Logf("✓ Alice's balance: %s", FormatAmount(aliceBalance.Balance, CurrencyUSD))
+	t.Logf("✓ Alice's balance: %s", currency.FormatAmount(aliceBalance.Balance, currency.CurrencyUSD))
 
 	// Step 2: Alice transfers $50 to Bob
 	t.Log("\nStep 2: Alice transfers $50 to Bob")
@@ -62,7 +63,7 @@ func TestTransferBasic(t *testing.T) {
 	if aliceBalance.Balance != expectedAlice {
 		t.Errorf("Expected Alice's balance to be %d, got %d", expectedAlice, aliceBalance.Balance)
 	}
-	t.Logf("✓ Alice's final balance: %s", FormatAmount(aliceBalance.Balance, CurrencyUSD))
+	t.Logf("✓ Alice's final balance: %s", currency.FormatAmount(aliceBalance.Balance, currency.CurrencyUSD))
 
 	bobBalance, err := service.GetBalance(bobWalletID)
 	if err != nil {
@@ -72,7 +73,7 @@ func TestTransferBasic(t *testing.T) {
 	if bobBalance.Balance != expectedBob {
 		t.Errorf("Expected Bob's balance to be %d, got %d", expectedBob, bobBalance.Balance)
 	}
-	t.Logf("✓ Bob's final balance: %s", FormatAmount(bobBalance.Balance, CurrencyUSD))
+	t.Logf("✓ Bob's final balance: %s", currency.FormatAmount(bobBalance.Balance, currency.CurrencyUSD))
 
 	// Step 4: Verify transaction balances to zero
 	t.Log("\nStep 4: Verify transaction integrity")
@@ -144,21 +145,21 @@ func TestTransferWithFee(t *testing.T) {
 	if aliceBalance.Balance != expectedAlice {
 		t.Errorf("Expected Alice's balance to be %d, got %d", expectedAlice, aliceBalance.Balance)
 	}
-	t.Logf("✓ Alice: %s (paid $50 + $1 fee)", FormatAmount(aliceBalance.Balance, CurrencyUSD))
+	t.Logf("✓ Alice: %s (paid $50 + $1 fee)", currency.FormatAmount(aliceBalance.Balance, currency.CurrencyUSD))
 
 	bobBalance, _ := service.GetBalance(bobWalletID)
 	expectedBob := int64(5000) // $50 (no fee)
 	if bobBalance.Balance != expectedBob {
 		t.Errorf("Expected Bob's balance to be %d, got %d", expectedBob, bobBalance.Balance)
 	}
-	t.Logf("✓ Bob: %s (received $50, no fee)", FormatAmount(bobBalance.Balance, CurrencyUSD))
+	t.Logf("✓ Bob: %s (received $50, no fee)", currency.FormatAmount(bobBalance.Balance, currency.CurrencyUSD))
 
 	systemBalance, _ := service.GetBalance("system-fee-account")
 	expectedSystem := int64(100) // $1 fee
 	if systemBalance.Balance != expectedSystem {
 		t.Errorf("Expected system balance to be %d, got %d", expectedSystem, systemBalance.Balance)
 	}
-	t.Logf("✓ System: %s (platform fee)", FormatAmount(systemBalance.Balance, CurrencyUSD))
+	t.Logf("✓ System: %s (platform fee)", currency.FormatAmount(systemBalance.Balance, currency.CurrencyUSD))
 
 	// Step 4: Verify transaction balances
 	t.Log("\nStep 4: Verify transaction integrity")
@@ -181,7 +182,7 @@ func TestTransferWithFee(t *testing.T) {
 		t.Logf("  - %s %s: %s (%s)",
 			entry.AccountID,
 			entry.EntryType,
-			FormatAmount(entry.Amount, entry.Currency),
+			currency.FormatAmount(entry.Amount, entry.Currency),
 			entry.Description,
 		)
 	}
@@ -231,7 +232,7 @@ func TestInsufficientBalance(t *testing.T) {
 	if balance.Balance != 3000 {
 		t.Errorf("Expected balance to remain 3000, got %d", balance.Balance)
 	}
-	t.Logf("✓ Alice's balance unchanged: %s", FormatAmount(balance.Balance, CurrencyUSD))
+	t.Logf("✓ Alice's balance unchanged: %s", currency.FormatAmount(balance.Balance, currency.CurrencyUSD))
 }
 
 // TestAccountStatement tests retrieving transaction history
@@ -282,7 +283,7 @@ func TestAccountStatement(t *testing.T) {
 			i+1,
 			entry.EntryType,
 			entry.TransactionType,
-			FormatAmount(entry.Amount, entry.Currency),
+			currency.FormatAmount(entry.Amount, entry.Currency),
 			entry.Description,
 		)
 	}
@@ -293,5 +294,5 @@ func TestAccountStatement(t *testing.T) {
 	if balance.Balance != expectedBalance {
 		t.Errorf("Expected final balance %d, got %d", expectedBalance, balance.Balance)
 	}
-	t.Logf("✓ Final balance: %s", FormatAmount(balance.Balance, CurrencyUSD))
+	t.Logf("✓ Final balance: %s", currency.FormatAmount(balance.Balance, currency.CurrencyUSD))
 }

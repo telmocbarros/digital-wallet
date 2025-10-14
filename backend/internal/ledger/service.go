@@ -1,6 +1,7 @@
 package ledger
 
 import (
+	"digitalwallet/backend/pkg/currency"
 	"fmt"
 	"log"
 	"time"
@@ -22,7 +23,7 @@ func NewService(repo Repository) *Service {
 type TransferRequest struct {
 	FromAccountID string
 	ToAccountID   string
-	Amount        int64  // Amount in cents
+	Amount        int64 // Amount in cents
 	Description   string
 	TransactionID string // Optional: can be generated if not provided
 }
@@ -89,7 +90,7 @@ func (s *Service) RecordTransfer(req *TransferRequest) (string, error) {
 			AccountID:       req.FromAccountID,
 			AccountType:     AccountTypeUserWallet,
 			Amount:          -req.Amount, // Negative for debit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeDebit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeTransfer,
@@ -103,7 +104,7 @@ func (s *Service) RecordTransfer(req *TransferRequest) (string, error) {
 			AccountID:       req.ToAccountID,
 			AccountType:     AccountTypeUserWallet,
 			Amount:          req.Amount, // Positive for credit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeCredit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeTransfer,
@@ -169,7 +170,7 @@ func (s *Service) RecordTransferWithFee(req *TransferRequest, feeAmount int64) (
 			AccountID:       req.FromAccountID,
 			AccountType:     AccountTypeUserWallet,
 			Amount:          -totalDebit, // Negative for debit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeDebit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeTransfer,
@@ -183,7 +184,7 @@ func (s *Service) RecordTransferWithFee(req *TransferRequest, feeAmount int64) (
 			AccountID:       req.ToAccountID,
 			AccountType:     AccountTypeUserWallet,
 			Amount:          req.Amount, // Positive for credit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeCredit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeTransfer,
@@ -197,7 +198,7 @@ func (s *Service) RecordTransferWithFee(req *TransferRequest, feeAmount int64) (
 			AccountID:       "system-fee-account", // System account ID
 			AccountType:     AccountTypeSystemFee,
 			Amount:          feeAmount, // Positive for credit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeCredit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeFee,
@@ -248,7 +249,7 @@ func (s *Service) RecordDeposit(req *DepositRequest) (string, error) {
 			AccountID:       req.AccountID,
 			AccountType:     AccountTypeUserWallet,
 			Amount:          req.Amount, // Positive for credit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeCredit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeDeposit,
@@ -262,7 +263,7 @@ func (s *Service) RecordDeposit(req *DepositRequest) (string, error) {
 			AccountID:       "external-bank-pool", // System account for external funds
 			AccountType:     AccountTypeExternalBank,
 			Amount:          -req.Amount, // Negative for debit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeDebit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeDeposit,
@@ -325,7 +326,7 @@ func (s *Service) RecordWithdrawal(req *WithdrawalRequest) (string, error) {
 			AccountID:       req.AccountID,
 			AccountType:     AccountTypeUserWallet,
 			Amount:          -req.Amount, // Negative for debit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeDebit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeWithdrawal,
@@ -339,7 +340,7 @@ func (s *Service) RecordWithdrawal(req *WithdrawalRequest) (string, error) {
 			AccountID:       "external-bank-pool",
 			AccountType:     AccountTypeExternalBank,
 			Amount:          req.Amount, // Positive for credit
-			Currency:        CurrencyUSD,
+			Currency:        currency.CurrencyUSD,
 			EntryType:       EntryTypeCredit,
 			TransactionID:   transactionID,
 			TransactionType: TransactionTypeWithdrawal,

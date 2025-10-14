@@ -1,8 +1,8 @@
 package ledger
 
 import (
+	"digitalwallet/backend/pkg/currency"
 	"errors"
-	"fmt"
 )
 
 // Account Types - What kind of account is this?
@@ -24,12 +24,6 @@ const (
 	TransactionTypeDeposit    = "DEPOSIT"    // External funds coming in
 	TransactionTypeWithdrawal = "WITHDRAWAL" // Funds going out to external account
 	TransactionTypeFee        = "FEE"        // Platform fee charge
-)
-
-// Currency codes
-const (
-	CurrencyUSD = "USD"
-	CurrencyEUR = "EUR"
 )
 
 // Validation errors
@@ -81,7 +75,7 @@ func (e *LedgerEntry) ToDTO() *LedgerEntryDTO {
 	return &LedgerEntryDTO{
 		ID:              e.ID,
 		AccountID:       e.AccountID,
-		Amount:          CentsToStandardFormat(e.Amount),
+		Amount:          currency.CentsToStandardCurrencyFormat(e.Amount),
 		Currency:        e.Currency,
 		EntryType:       e.EntryType,
 		TransactionID:   e.TransactionID,
@@ -119,7 +113,7 @@ type AccountBalance struct {
 func (b *AccountBalance) ToDTO() *AccountBalanceDTO {
 	return &AccountBalanceDTO{
 		AccountID: b.AccountID,
-		Balance:   CentsToStandardFormat(b.Balance),
+		Balance:   currency.CentsToStandardCurrencyFormat(b.Balance),
 		Currency:  b.Currency,
 		UpdatedAt: b.UpdatedAt,
 	}
@@ -128,31 +122,7 @@ func (b *AccountBalance) ToDTO() *AccountBalanceDTO {
 // AccountBalanceDTO is the API response format
 type AccountBalanceDTO struct {
 	AccountID string  `json:"account_id"`
-	Balance   float64 `json:"balance"` // In dollars
+	Balance   float64 `json:"balance"` // In standard format (e.g., 50.00)
 	Currency  string  `json:"currency"`
 	UpdatedAt int64   `json:"updated_at"`
-}
-
-// Helper functions for converting between cents and dollars
-
-// DollarsToCents converts a dollar amount to cents
-// Example: 50.00 -> 5000
-func DollarsToCents(dollars float64) int64 {
-	return int64(dollars * 100)
-}
-
-// CentsToStandardFormat converts cents to dollars
-// Example: 5000 -> 50.00
-func CentsToStandardFormat(cents int64) float64 {
-	return float64(cents) / 100.0
-}
-
-// FormatAmount formats a cent amount as a currency string
-// Example: 5000 -> "$50.00"
-func FormatAmount(cents int64, currency string) string {
-	symbol := "$" // Default to USD
-	if currency == CurrencyEUR {
-		symbol = "€"
-	}
-	return fmt.Sprintf("%s%.2f", symbol, CentsToStandardFormat(cents))
 }
