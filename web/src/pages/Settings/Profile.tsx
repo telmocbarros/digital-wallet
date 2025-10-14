@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from '../../components/atoms/Button';
 
-export default function Profile() {
+export default function Profile({ className }: { className?: string }) {
   const [displayName, setDisplayName] = useState('John Doe');
   const [bio, setBio] = useState(
     'Financial enthusiast and digital wallet user.'
@@ -10,7 +10,9 @@ export default function Profile() {
   const [website, setWebsite] = useState('https://johndoe.com');
   const [twitter, setTwitter] = useState('@johndoe');
   const [linkedin, setLinkedin] = useState('linkedin.com/in/johndoe');
-  const [profileVisibility, setProfileVisibility] = useState<'public' | 'private'>('public');
+  const [profileVisibility, setProfileVisibility] = useState<
+    'public' | 'private'
+  >('public');
   const [showTransactionHistory, setShowTransactionHistory] = useState(false);
 
   const handleSave = () => {
@@ -38,7 +40,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-4xl">
+    <div className={`max-w-4xl ${className}`}>
       {/* Header */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold text-gray-900 mb-2">Profile</h2>
@@ -187,9 +189,7 @@ export default function Profile() {
 
       {/* Social Links Section */}
       <div className="mb-8 pb-8 border-b border-gray-200">
-        <h3 className="text-sm font-medium text-gray-900 mb-4">
-          Social Links
-        </h3>
+        <h3 className="text-sm font-medium text-gray-900 mb-4">Social Links</h3>
 
         {/* Twitter */}
         <div className="mb-4">
@@ -201,11 +201,7 @@ export default function Profile() {
           </label>
           <div className="flex items-center">
             <span className="inline-flex items-center px-3 py-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-lg">
-              <svg
-                className="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
             </span>
@@ -230,11 +226,7 @@ export default function Profile() {
           </label>
           <div className="flex items-center">
             <span className="inline-flex items-center px-3 py-2 border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-l-lg">
-              <svg
-                className="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
               </svg>
             </span>
@@ -268,7 +260,9 @@ export default function Profile() {
                 name="visibility"
                 value="public"
                 checked={profileVisibility === 'public'}
-                onChange={(e) => setProfileVisibility(e.target.value as 'public' | 'private')}
+                onChange={(e) =>
+                  setProfileVisibility(e.target.value as 'public' | 'private')
+                }
                 className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
               />
               <div className="ml-3">
@@ -286,7 +280,9 @@ export default function Profile() {
                 name="visibility"
                 value="private"
                 checked={profileVisibility === 'private'}
-                onChange={(e) => setProfileVisibility(e.target.value as 'public' | 'private')}
+                onChange={(e) =>
+                  setProfileVisibility(e.target.value as 'public' | 'private')
+                }
                 className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
               />
               <div className="ml-3">
@@ -315,8 +311,8 @@ export default function Profile() {
                 Show transaction history
               </span>
               <p className="text-xs text-gray-500">
-                Allow others to see your public transaction history (amounts
-                are always hidden).
+                Allow others to see your public transaction history (amounts are
+                always hidden).
               </p>
             </div>
           </label>

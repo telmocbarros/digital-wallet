@@ -4,7 +4,7 @@ import Button from '../../components/atoms/Button';
 type ChartStyle = 'default' | 'simplified' | 'custom';
 type CookieBanner = 'default' | 'simplified' | 'none';
 
-export default function Appearance() {
+export default function Appearance({ className }: { className?: string }) {
   const [brandColor, setBrandColor] = useState('#444CE7');
   const [chartStyle, setChartStyle] = useState<ChartStyle>('default');
   const [language, setLanguage] = useState('en-UK');
@@ -26,32 +26,11 @@ export default function Appearance() {
   };
 
   return (
-    <div className="max-w-4xl">
+    <div className={`max-w-4xl ${className}`}>
       {/* Header */}
       <div className="mb-8">
         <div className="flex justify-between items-start mb-2">
           <h2 className="text-2xl font-semibold text-gray-900">Appearance</h2>
-          <a
-            href="https://dashboard.untitledui.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1"
-          >
-            dashboard.untitledui.com
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          </a>
         </div>
         <p className="text-gray-600">
           Change how your public dashboard looks and feels.
@@ -93,7 +72,10 @@ export default function Appearance() {
           Dashboard charts
         </h3>
         <p className="text-sm text-gray-600 mb-2">How charts are displayed.</p>
-        <a href="#" className="text-sm text-blue-600 hover:text-blue-700 mb-4 inline-block">
+        <a
+          href="#"
+          className="text-sm text-blue-600 hover:text-blue-700 mb-4 inline-block"
+        >
           View examples
         </a>
 
@@ -109,8 +91,16 @@ export default function Appearance() {
           >
             {chartStyle === 'default' && (
               <div className="absolute top-2 right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-3 h-3 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}
@@ -146,8 +136,16 @@ export default function Appearance() {
           >
             {chartStyle === 'simplified' && (
               <div className="absolute top-2 right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-3 h-3 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}
@@ -162,7 +160,9 @@ export default function Appearance() {
                 />
               </svg>
             </div>
-            <h4 className="text-sm font-medium text-gray-900 mb-1">Simplified</h4>
+            <h4 className="text-sm font-medium text-gray-900 mb-1">
+              Simplified
+            </h4>
             <p className="text-xs text-gray-600">Minimal and modern.</p>
           </div>
 
@@ -177,17 +177,29 @@ export default function Appearance() {
           >
             {chartStyle === 'custom' && (
               <div className="absolute top-2 right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-3 h-3 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}
             <div className="bg-gray-100 border border-gray-200 rounded p-2 mb-3 h-24 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-xs text-gray-400 mb-1">{'</> Edit CSS'}</div>
+                <div className="text-xs text-gray-400 mb-1">
+                  {'</> Edit CSS'}
+                </div>
               </div>
             </div>
-            <h4 className="text-sm font-medium text-gray-900 mb-1">Custom CSS</h4>
+            <h4 className="text-sm font-medium text-gray-900 mb-1">
+              Custom CSS
+            </h4>
             <p className="text-xs text-gray-600">Manage styling with CSS.</p>
           </div>
         </div>
@@ -213,8 +225,18 @@ export default function Appearance() {
             <option value="pt">🇵🇹 Português</option>
           </select>
           <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <svg
+              className="w-4 h-4 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
             </svg>
           </div>
         </div>
@@ -222,11 +244,16 @@ export default function Appearance() {
 
       {/* Cookie Banner Section */}
       <div className="mb-8 pb-8">
-        <h3 className="text-sm font-medium text-gray-900 mb-1">Cookie banner</h3>
+        <h3 className="text-sm font-medium text-gray-900 mb-1">
+          Cookie banner
+        </h3>
         <p className="text-sm text-gray-600 mb-2">
           Display cookie banners to visitors.
         </p>
-        <a href="#" className="text-sm text-blue-600 hover:text-blue-700 mb-4 inline-block">
+        <a
+          href="#"
+          className="text-sm text-blue-600 hover:text-blue-700 mb-4 inline-block"
+        >
           View examples
         </a>
 
@@ -242,8 +269,16 @@ export default function Appearance() {
           >
             {cookieBanner === 'default' && (
               <div className="absolute top-2 right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-3 h-3 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}
@@ -253,7 +288,9 @@ export default function Appearance() {
               </div>
             </div>
             <h4 className="text-sm font-medium text-gray-900 mb-1">Default</h4>
-            <p className="text-xs text-gray-600">Cookie controls for visitors.</p>
+            <p className="text-xs text-gray-600">
+              Cookie controls for visitors.
+            </p>
           </div>
 
           {/* Simplified Cookie Banner */}
@@ -267,8 +304,16 @@ export default function Appearance() {
           >
             {cookieBanner === 'simplified' && (
               <div className="absolute top-2 right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-3 h-3 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}
@@ -277,7 +322,9 @@ export default function Appearance() {
                 Simple
               </div>
             </div>
-            <h4 className="text-sm font-medium text-gray-900 mb-1">Simplified</h4>
+            <h4 className="text-sm font-medium text-gray-900 mb-1">
+              Simplified
+            </h4>
             <p className="text-xs text-gray-600">Show a simplified banner.</p>
           </div>
 
@@ -292,8 +339,16 @@ export default function Appearance() {
           >
             {cookieBanner === 'none' && (
               <div className="absolute top-2 right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-3 h-3 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
             )}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from '../../components/atoms/Button';
 
-export default function Account() {
+export default function Account({ className }: { className?: string }) {
   const [name, setName] = useState('John Doe');
   const [email, setEmail] = useState('john.doe@example.com');
   const [phone, setPhone] = useState('+1 (555) 123-4567');
@@ -34,7 +34,7 @@ export default function Account() {
   };
 
   return (
-    <div className="max-w-4xl">
+    <div className={`max-w-4xl ${className}`}>
       {/* Header */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold text-gray-900 mb-2">Account</h2>

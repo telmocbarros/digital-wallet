@@ -9,7 +9,7 @@ type SessionDevice = {
   isCurrent: boolean;
 };
 
-export default function Security() {
+export default function Security({ className }: { className?: string }) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -83,7 +83,7 @@ export default function Security() {
   };
 
   return (
-    <div className="max-w-4xl">
+    <div className={`max-w-4xl ${className}`}>
       {/* Header */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold text-gray-900 mb-2">Security</h2>
