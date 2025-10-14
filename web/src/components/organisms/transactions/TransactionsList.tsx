@@ -1,4 +1,4 @@
-import TransactionItem from '../molecules/TransactionItem';
+import TransactionItem from '../../molecules/TransactionItem';
 
 export default function TransactionsList() {
   return (

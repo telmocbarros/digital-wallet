@@ -26,7 +26,7 @@ export default function MainLayout() {
       />
       <div className="fixed top-[60px] left-0 right-0 bottom-0 flex flex-row overflow-hidden">
         <SideBar />
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4">
+        <main className="flex-1 overflow-y-hidden overflow-x-hidden p-4">
           <Outlet />
         </main>
       </div>

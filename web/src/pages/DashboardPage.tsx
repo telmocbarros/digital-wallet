@@ -1,7 +1,7 @@
 import BalanceCard from '../components/molecules/BalanceCard';
 import TableHeader from '../components/molecules/TableHeader';
 import CardsList from '../components/organisms/CardsList';
-import TransactionsList from '../components/organisms/TransactionsList';
+import TransactionsList from '../components/organisms/transactions/TransactionsList';
 
 export default function DashboardPage() {
   return (
